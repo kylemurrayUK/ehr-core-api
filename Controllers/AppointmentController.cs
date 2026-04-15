@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
 
     [Route("api/[controller]/[action]")]

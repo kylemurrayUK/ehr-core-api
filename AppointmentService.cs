@@ -1,4 +1,4 @@
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     public class  AppointmentService
     {
@@ -44,7 +44,7 @@ namespace AppointmentManagementAPI
             return newAppointment;
         }
 
-        // No delete method as in a medical conext you would want to keep all appointments
+        // No delete method as in a medical context you would want to keep all appointments
         // - even cancelled ones - for auditing purposes.
         public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {

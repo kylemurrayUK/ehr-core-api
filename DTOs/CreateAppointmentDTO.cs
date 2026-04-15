@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     /// <summary>
     /// Represents data needed to create an appointment
