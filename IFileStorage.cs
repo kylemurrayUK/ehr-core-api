@@ -1,4 +1,4 @@
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     public interface IFileStorage
     {

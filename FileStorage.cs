@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     /// <summary>
     /// Class responsible for handling file loading/saving for appointments.
