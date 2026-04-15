@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api\\ehr-core-api.csproj": {}
+    "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api\\ehr-core-api.csproj": {
+    "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api\\ehr-core-api.csproj",
+        "projectUniqueName": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api.csproj",
         "projectName": "ehr-core-api",
-        "projectPath": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api\\ehr-core-api.csproj",
+        "projectPath": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api.csproj",
         "packagesPath": "C:\\Users\\kylew\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\ehr-core-api\\obj\\",
+        "outputPath": "C:\\Users\\kylew\\Documents\\C#ProjectsRoadmap\\ehr-core-api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
