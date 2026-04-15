@@ -10,8 +10,8 @@ namespace EHRCoreAPI
         /// <summary>
         /// Patient name
         /// </summary>
-        [Required(ErrorMessage = "Patient Name is required.")]
-        public string Patient {get; set;} = string.Empty;
+        [Required(ErrorMessage = "Patient Id is required.")]
+        public int PatientId {get; set;}
         /// <summary>
         /// Department appoint sits with
         /// </summary>
@@ -20,8 +20,8 @@ namespace EHRCoreAPI
         /// <summary>
         /// Clinician patient will be seeing
         /// </summary>
-        [Required(ErrorMessage = "Clinician name is required.")]
-        public string Clinician {get; set;} = string.Empty;
+        [Required(ErrorMessage = "Clinician Id name is required.")]
+        public int ClinicianId {get; set;}
         [Required(ErrorMessage = "Date and time of appointment is required. ")]
         public DateTime AppointmentTime{get; set;}
     }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     /// <summary>
     /// Object that represents appointments and contains all information needed to manage them.
@@ -15,7 +15,7 @@ namespace AppointmentManagementAPI
         /// Patients name. Required field and is initalised empty.
         /// </summary>
         [Required]
-        public string Patient {get; set;} = string.Empty;
+        public int PatientId {get; set;}
 
         /// <summary>
         /// Department appointment is assigned to. Required field and is initalised empty.
@@ -27,7 +27,7 @@ namespace AppointmentManagementAPI
         /// Clinician assigned to appointments name. Required field and is initalised empty.
         /// </summary>
         [Required]
-        public string Clinician {get; set;} = string.Empty;
+        public int ClinicianId {get; set;}
 
         /// <summary>
         /// Whether appointment is Pending, Completed, Cancelled or Entered in error
@@ -40,13 +40,13 @@ namespace AppointmentManagementAPI
         [Required]
         public DateTime AppointmentTime {get; set;}
 
-        public Appointment(int id,string patient, string department,
-                           string clinician, AppointmentStatus status, DateTime appointmentTime)
+        public Appointment(int id,int patientId, string department,
+                           int clinicianId, AppointmentStatus status, DateTime appointmentTime)
         {
             Id = id;
-            Patient = patient;
+            PatientId = patientId;
             Department = department;
-            Clinician = clinician;
+            ClinicianId = clinicianId;
             Status = status;
             AppointmentTime = appointmentTime;
         }

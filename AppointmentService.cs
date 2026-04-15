@@ -22,13 +22,13 @@ namespace EHRCoreAPI
         }
 
 
-        public List<Appointment> GetPatientAppointments(string patient)
+        public List<Appointment> GetPatientAppointments(int patientID)
         {
-            return _appointments.Where(a => a.Patient == patient).ToList();
+            return _appointments.Where(a => a.PatientId == patientID).ToList();
         }
-        public List<Appointment> GetClinicianAppointments(string clinician)
+        public List<Appointment> GetClinicianAppointments(int clinicianID)
         {
-            return _appointments.Where(a => a.Clinician == clinician).ToList();
+            return _appointments.Where(a => a.ClinicianId == clinicianID).ToList();
         }
         public List<Appointment> GetDepartmentAppointments(string department)
         {
@@ -38,7 +38,7 @@ namespace EHRCoreAPI
         public Appointment AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
             int id = FindNextID(_appointments);
-            Appointment newAppointment = new Appointment(id, createAppointmentDTO.Patient, createAppointmentDTO.Department, createAppointmentDTO.Clinician, AppointmentStatus.Pending, createAppointmentDTO.AppointmentTime);
+            Appointment newAppointment = new Appointment(id, createAppointmentDTO.PatientId, createAppointmentDTO.Department, createAppointmentDTO.ClinicianId, AppointmentStatus.Pending, createAppointmentDTO.AppointmentTime);
             _appointments.Add(newAppointment);
             _fileStorage.SaveFile(_appointments);
             return newAppointment;
