@@ -8,5 +8,13 @@ namespace EHRCoreAPI
         public string FirstName {get; set;} = string.Empty;
         public string LastName {get; set;} = string.Empty;
         public DateOnly DOB {get; set;}
+
+        public Person (int id, string firstName, string lastName, DateOnly dob)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            DOB = dob;
+        }
     } 
 }
