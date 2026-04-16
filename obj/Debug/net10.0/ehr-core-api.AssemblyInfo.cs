@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ehr-core-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1ada50bb97d91bfa51cb57b5dbeb1be717a0f43")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0ce39a53cb832e167fa4d8708c345841b01b81a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ehr-core-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ehr-core-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

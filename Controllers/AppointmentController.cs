@@ -35,14 +35,14 @@ namespace EHRCoreAPI
         //In a typical NHS system an id would be used here - this will be implemented in a later project.
         [HttpGet]
         public ActionResult<List<Appointment>> GetAppointments( 
-            [FromQuery] string? patient,
-            [FromQuery] string? clinician,
+            [FromQuery] int? patientId,
+            [FromQuery] int? clinicianId,
             [FromQuery] string? department)
         {
             int parameterCounter = 0;
-            string?[] queryParameters = [patient, clinician, department];
+            object?[] queryParameters = [patientId, clinicianId, department];
 
-            foreach (string? parameter in queryParameters)
+            foreach (object? parameter in queryParameters)
             {
                 if (parameter != null)
                 {
@@ -61,13 +61,13 @@ namespace EHRCoreAPI
             
             List<Appointment> queryResult = new List<Appointment>();
 
-            if (patient != null)
+            if (patientId != null)
             {
-                queryResult = _appointmentService.GetPatientAppointments(patient);
+                queryResult = _appointmentService.GetPatientAppointments(patientId.Value);
             }
-            else if (clinician != null)
+            else if (clinicianId != null)
             {
-                queryResult = _appointmentService.GetClinicianAppointments(clinician);
+                queryResult = _appointmentService.GetClinicianAppointments(clinicianId.Value);
             }
             else if (department != null)
             {

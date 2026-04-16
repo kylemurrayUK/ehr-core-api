@@ -80,14 +80,11 @@ namespace EHRCoreAPI
 
         private int FindNextID(List<Appointment> appointments)
         {
-
             if (appointments.Count() == 0)
             {
                 return 1;
             }
             return appointments.Max(a => a.Id) + 1;
-            
-
         }
     }
 }
