@@ -115,15 +115,5 @@ namespace EHRCoreAPI
             }
             return appointments.Max(a => a.Id) + 1;
         }
-
-        public bool DoesPatientExist(int patientId)
-        {
-            return _patients.Any(p => p.Id == patientId);
-        }
-
-        public bool DoesClinicianExist(int clinicianId)
-        {
-            return _clinicians.Any(c => c.Id == clinicianId);
-        }
     }
 }

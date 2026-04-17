@@ -91,7 +91,7 @@ namespace EHRCoreAPI
                 return BadRequest(createAppointment.Message);
             }
 
-            return CreatedAtAction(nameof(GetAppointment), new {id = createAppointment.NewAppointment.Id}, createAppointment.NewAppointment);
+            return CreatedAtAction(nameof(GetAppointment), new {id = createAppointment.NewAppointment!.Id}, createAppointment.NewAppointment);
         }
 
         [HttpPatch]
