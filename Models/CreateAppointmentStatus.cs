@@ -2,9 +2,9 @@ namespace EHRCoreAPI
 {
     public class CreateAppointmentStatus
     {
-        public bool WasSuccessful;
-        public Appointment? NewAppointment;
-        public string? Message;
+        public bool WasSuccessful {get;}
+        public Appointment? NewAppointment {get;}
+        public string? Message {get;}
 
         private CreateAppointmentStatus(bool wassuccessful, Appointment? appointment, string? message)
         {
