@@ -1,6 +1,6 @@
 namespace EHRCoreAPI
 {
-    class CreateAppointmentStatus
+    public class CreateAppointmentStatus
     {
         public bool WasSuccessful;
         public Appointment? NewAppointment;

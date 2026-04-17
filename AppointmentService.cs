@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+
 namespace EHRCoreAPI
 {
     public class  AppointmentService
@@ -53,13 +55,22 @@ namespace EHRCoreAPI
             return _appointments.Where(a => a.Department == department).ToList();
         }
 
-        public Appointment AddAppointment(CreateAppointmentDTO createAppointmentDTO)
+        public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
+            if (_patients.Any(p => p.Id == createAppointmentDTO.PatientId))
+            {
+                return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
+            }
+            if (_clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
+            {
+                return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
+            }
+
             int id = FindNextID(_appointments);
             Appointment newAppointment = new Appointment(id, createAppointmentDTO.PatientId, createAppointmentDTO.Department, createAppointmentDTO.ClinicianId, AppointmentStatus.Pending, createAppointmentDTO.AppointmentTime);
             _appointments.Add(newAppointment);
             _fileStorage.SaveFile(_appointments);
-            return newAppointment;
+            return CreateAppointmentStatus.Success(newAppointment);
         }
 
         // No delete method as in a medical context you would want to keep all appointments
