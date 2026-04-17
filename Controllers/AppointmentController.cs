@@ -85,6 +85,7 @@ namespace EHRCoreAPI
                 return BadRequest(ModelState);
             }
 
+
             Appointment newAppointment =_appointmentService.AddAppointment(createAppointmentDTO);
 
             return CreatedAtAction(nameof(GetAppointment), new {id = newAppointment.Id}, newAppointment);

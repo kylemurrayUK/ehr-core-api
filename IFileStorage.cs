@@ -4,5 +4,6 @@ namespace EHRCoreAPI
     {
         List<Appointment> LoadFile();
         void SaveFile(List<Appointment> appointments);
+
     }
 }
