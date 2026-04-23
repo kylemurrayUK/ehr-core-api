@@ -2,13 +2,13 @@ namespace EHRCoreAPI
 {
     public class Patient : Person
     {
-        public string NHSNumber {get; set;} = string.Empty;
+        public string NhsNumber {get; set;} = string.Empty;
         public string Address {get; set;} = string.Empty;
 
-        public Patient (int iD, string firstName, string lastName, DateOnly dob, 
-                        string nhsNumber, string address) : base (iD, firstName, lastName, dob)
+        public Patient (int Id, string firstName, string lastName, DateOnly dob, 
+                        string nhsNumber, string address) : base (Id, firstName, lastName, dob)
         {
-            NHSNumber = nhsNumber;
+            NhsNumber = nhsNumber;
             Address = address;
         }
     }

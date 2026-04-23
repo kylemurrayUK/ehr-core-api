@@ -2,14 +2,14 @@ namespace EHRCoreAPI
 {
     public class Clinician : Person
     {
-        public string GMCNumber {get; set;} = string.Empty;
-        public string Speciality {get; set;} = string.Empty;
+        public string GmcNumber {get; set;} = string.Empty;
+        public string Specialty {get; set;} = string.Empty;
 
-        public Clinician (int iD, string firstName, string lastName, DateOnly dob, 
-                        string gmcNumber, string speciality) : base (iD, firstName, lastName, dob)
+        public Clinician (int Id, string firstName, string lastName, DateOnly dob, 
+                        string gmcNumber, string specialty) : base (Id, firstName, lastName, dob)
         {
-            GMCNumber = speciality;
-            Speciality = gmcNumber;
+            GmcNumber = gmcNumber;
+            Specialty = specialty;
         }
     }
 }

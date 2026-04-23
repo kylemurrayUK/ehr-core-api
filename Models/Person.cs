@@ -7,14 +7,14 @@ namespace EHRCoreAPI
         public int Id {get; set;} 
         public string FirstName {get; set;} = string.Empty;
         public string LastName {get; set;} = string.Empty;
-        public DateOnly DOB {get; set;}
+        public DateOnly Dob {get; set;}
 
         public Person (int id, string firstName, string lastName, DateOnly dob)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
-            DOB = dob;
+            Dob = dob;
         }
     } 
 }

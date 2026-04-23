@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentManagementAPI
+namespace EHRCoreAPI
 {
     /// <summary>
     /// Object that contains information needed to alter an appointments status
