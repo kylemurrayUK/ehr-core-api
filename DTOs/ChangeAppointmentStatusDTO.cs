@@ -8,7 +8,7 @@ namespace EHRCoreAPI
     public class ChangeAppointmentStatusDTO
     {
         [Required(ErrorMessage = "Appointment ID required.")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "New status is required")]
         public AppointmentStatus Status { get; set;}

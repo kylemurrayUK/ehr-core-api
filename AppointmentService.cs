@@ -1,4 +1,3 @@
-using System.Net.NetworkInformation;
 
 namespace EHRCoreAPI
 {
@@ -57,11 +56,11 @@ namespace EHRCoreAPI
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
-            if (_patients.Any(p => p.Id == createAppointmentDTO.PatientId))
+            if (!_patients.Any(p => p.Id == createAppointmentDTO.PatientId))
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
             }
-            if (_clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
+            if (!_clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }

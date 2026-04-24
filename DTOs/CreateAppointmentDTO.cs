@@ -11,7 +11,7 @@ namespace EHRCoreAPI
         /// Patient name
         /// </summary>
         [Required(ErrorMessage = "Patient Id is required.")]
-        public int PatientId {get; set;}
+        public int? PatientId {get; set;}
         /// <summary>
         /// Department appoint sits with
         /// </summary>
@@ -21,7 +21,7 @@ namespace EHRCoreAPI
         /// Clinician patient will be seeing
         /// </summary>
         [Required(ErrorMessage = "Clinician Id name is required.")]
-        public int ClinicianId {get; set;}
+        public int? ClinicianId {get; set;}
         [Required(ErrorMessage = "Date and time of appointment is required. ")]
         public DateTime AppointmentTime{get; set;}
     }
