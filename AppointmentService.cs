@@ -3,66 +3,53 @@ namespace EHRCoreAPI
 {
     public class  AppointmentService
     {
-        private List<Appointment> _appointments;
-        private IFileStorage _fileStorage;
 
-        List<Patient> _patients = new List<Patient>()
+        private readonly ApiDbContext _db;
+        public AppointmentService(ApiDbContext db)
         {
+            _db = db;
 
-        };
-
-        List<Clinician> _clinicians = new List<Clinician>()
-        {
-
-        };
-
-
-
-        public AppointmentService(IFileStorage fileStorage)
-        {
-            _fileStorage = fileStorage;
-            _appointments = fileStorage.LoadFile();
         }
 
         public List<Appointment> ListAppointments()
         {
-            return _appointments;
+            return _db.Appointments.ToList();
         }
         
         public Appointment? GetAppointment(int iD)
         {
-            return _appointments.FirstOrDefault(a => a.Id == iD);
+            return _db.Appointments.FirstOrDefault(a => a.Id == iD);
         }
 
 
         public List<Appointment> GetPatientAppointments(int patientID)
         {
-            return _appointments.Where(a => a.PatientId == patientID).ToList();
+            return _db.Appointments.Where(a => a.PatientId == patientID).ToList();
         }
         public List<Appointment> GetClinicianAppointments(int clinicianID)
         {
-            return _appointments.Where(a => a.ClinicianId == clinicianID).ToList();
+            return _db.Appointments.Where(a => a.ClinicianId == clinicianID).ToList();
         }
         public List<Appointment> GetDepartmentAppointments(string department)
         {
-            return _appointments.Where(a => a.Department == department).ToList();
+            return _db.Appointments.Where(a => a.Department == department).ToList();
         }
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
-            if (!_patients.Any(p => p.Id == createAppointmentDTO.PatientId))
+            if (!_db.Patients.Any(p => p.Id == createAppointmentDTO.PatientId))
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
             }
-            if (!_clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
+            if (!_db.Clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }
 
-            int id = FindNextID(_appointments);
-            Appointment newAppointment = new Appointment(id, createAppointmentDTO.PatientId, createAppointmentDTO.Department, createAppointmentDTO.ClinicianId, AppointmentStatus.Pending, createAppointmentDTO.AppointmentTime);
-            _appointments.Add(newAppointment);
-            _fileStorage.SaveFile(_appointments);
+            Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
+                                                          Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
+            _db.Appointments.Add(newAppointment);
+            _db.SaveChanges();
             return CreateAppointmentStatus.Success(newAppointment);
         }
 
@@ -73,9 +60,9 @@ namespace EHRCoreAPI
             bool wasSuccessful = false;
             string message = "Appointment not found";
 
-            if (_appointments.Any(a => a.Id == changeAppointmentStatusDTO.Id))
+            if (_db.Appointments.Any(a => a.Id == changeAppointmentStatusDTO.Id))
             {
-                foreach(Appointment appointment in _appointments)
+                foreach(Appointment appointment in _db.Appointments)
                 {
                     if(appointment.Id == changeAppointmentStatusDTO.Id)
                     {
@@ -94,19 +81,12 @@ namespace EHRCoreAPI
 
                     }
                 }
-                _fileStorage.SaveFile(_appointments);
+                _db.SaveChanges();
             }
             return (wasSuccessful, message);
         }
         
 
-        private int FindNextID(List<Appointment> appointments)
-        {
-            if (appointments.Count() == 0)
-            {
-                return 1;
-            }
-            return appointments.Max(a => a.Id) + 1;
-        }
+
     }
 }
