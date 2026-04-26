@@ -72,8 +72,7 @@ namespace EHRCoreAPI
 
             appointment.Status = changeAppointmentStatusDTO.Status;
             _db.SaveChanges();
-            return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}")
+            return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}");
         }
-
     }
 }
