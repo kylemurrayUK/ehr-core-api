@@ -8,7 +8,6 @@ namespace EHRCoreAPI
         public AppointmentService(ApiDbContext db)
         {
             _db = db;
-
         }
 
         public List<Appointment> ListAppointments()
@@ -16,9 +15,9 @@ namespace EHRCoreAPI
             return _db.Appointments.ToList();
         }
         
-        public Appointment? GetAppointment(int iD)
+        public Appointment? GetAppointment(int id)
         {
-            return _db.Appointments.FirstOrDefault(a => a.Id == iD);
+            return _db.Appointments.FirstOrDefault(a => a.Id == id);
         }
 
 
@@ -57,36 +56,24 @@ namespace EHRCoreAPI
         // - even cancelled ones - for auditing purposes.
         public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
-            bool wasSuccessful = false;
-            string message = "Appointment not found";
+            var appointment = _db.Appointments.FirstOrDefault(a => a.Id == changeAppointmentStatusDTO.Id);
 
-            if (_db.Appointments.Any(a => a.Id == changeAppointmentStatusDTO.Id))
+            if(appointment == null)
             {
-                foreach(Appointment appointment in _db.Appointments)
-                {
-                    if(appointment.Id == changeAppointmentStatusDTO.Id)
-                    {
-                        if (appointment.Status == changeAppointmentStatusDTO.Status)
-                        {
-                            message = $"Appointment was already {changeAppointmentStatusDTO.Status}.\n" + 
-                                        $"Appointment Status : {appointment.Status}";
-                            wasSuccessful = true;
-                        } 
-                        else
-                        {
-                            appointment.Status = changeAppointmentStatusDTO.Status;
-                            message = $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}";
-                            wasSuccessful = true;
-                        }
-
-                    }
-                }
-                _db.SaveChanges();
+                return (false, "Appointment not found");
             }
-            return (wasSuccessful, message);
-        }
-        
+            
+            if (appointment.Status == changeAppointmentStatusDTO.Status)
+            {
+                return ( true, $"Appointment was already {changeAppointmentStatusDTO.Status}.\n" + 
+                $"Appointment Status : {appointment.Status}");
 
+            } 
+
+            appointment.Status = changeAppointmentStatusDTO.Status;
+            _db.SaveChanges();
+            return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}")
+        }
 
     }
 }
