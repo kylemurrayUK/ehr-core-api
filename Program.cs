@@ -23,6 +23,15 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+        DbSeeder.SeedData(context);
+    }
+}
+
 app.UseHttpsRedirection();
 app.MapControllers();
 

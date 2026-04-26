@@ -8,18 +8,12 @@ namespace EHRCoreAPI
 
         List<Patient> _patients = new List<Patient>()
         {
-            new Patient(1, "Kyle", "Murray", new DateOnly(1997, 6, 16), "1234567", "16 Lidgate Close"),
-            new Patient(2, "Declan", "Mahoney", new DateOnly(1996, 9, 16), "7654321", "1 New York Street"),
-            new Patient(3, "Max", "Briggds", new DateOnly(1999, 5, 20), "4536271", "Somewhere in Leeds"),
-            new Patient(4, "Ali", "Grundy", new DateOnly(1997, 6, 15), "6253417", "Warwick Way")
+
         };
 
         List<Clinician> _clinicians = new List<Clinician>()
         {
-            new Clinician(1, "Johhny", "Doc", new DateOnly(1950, 5, 1), "0987654", "Surgery"),
-            new Clinician(2, "William", "Murray", new DateOnly(1959, 12, 17), "4567890", "Cardiology"),
-            new Clinician(3, "Susan", "Murray", new DateOnly(1958, 11, 9), "7869504", "Gastrointestinal"),
-            new Clinician(4, "Margaret", "Neil", new DateOnly(1958, 10, 2), "4059687", "Pharmacology")
+
         };
 
 
