@@ -23,11 +23,16 @@ namespace EHRCoreAPI
         {
             return _db.Appointments.Where(a => a.Department == department).ToList();
         }
-        public void AddAndSaveAppointment(Appointment NewAppointment)
+        public void AddAndSaveAppointment(Appointment newAppointment)
         {
-
+            _db.Appointments.Add(newAppointment);
+            _db.SaveChanges();
         }
-
+        public void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus)
+        {
+            appointment.Status = newAppointmentStatus;
+            _db.SaveChanges();
+        }
 
     }
 }

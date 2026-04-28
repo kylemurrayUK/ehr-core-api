@@ -2,6 +2,6 @@ namespace EHRCoreAPI
 {
     public interface IClinicianRepository
     {
-        bool DoesClinicianExist(int clinicianId);
+        Clinician? GetClinician(int clinicianId);
     }
 }

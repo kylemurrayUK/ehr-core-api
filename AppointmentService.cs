@@ -5,9 +5,15 @@ namespace EHRCoreAPI
     {
 
         private readonly IAppointmentRespository _appointmentRespository;
-        public AppointmentService(IAppointmentRespository appointmentRespository)
+        private readonly IPatientRepository _patientRespository;
+        private readonly IClinicianRepository _clinicianRespository;
+
+        public AppointmentService(IAppointmentRespository appointmentRespository, IPatientRepository patientRespository, 
+                                  IClinicianRepository clinicianRespository)
         {
             _appointmentRespository = appointmentRespository;
+            _patientRespository = patientRespository;
+            _clinicianRespository = clinicianRespository;
         }
 
         public List<Appointment> ListAppointments()
@@ -36,19 +42,18 @@ namespace EHRCoreAPI
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
-            if (!_db.Patients.Any(p => p.Id == createAppointmentDTO.PatientId))
+            if (_patientRespository.GetPatient(createAppointmentDTO.PatientId!.Value) == null)
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
             }
-            if (!_db.Clinicians.Any(c => c.Id == createAppointmentDTO.ClinicianId))
+            if (_clinicianRespository.GetClinician(createAppointmentDTO.ClinicianId!.Value) == null)
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }
 
             Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
                                                           Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
-            _db.Appointments.Add(newAppointment);
-            _db.SaveChanges();
+            _appointmentRespository.AddAndSaveAppointment(newAppointment);
             return CreateAppointmentStatus.Success(newAppointment);
         }
 
@@ -56,7 +61,7 @@ namespace EHRCoreAPI
         // - even cancelled ones - for auditing purposes.
         public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
-            var appointment = _db.Appointments.FirstOrDefault(a => a.Id == changeAppointmentStatusDTO.Id);
+            var appointment = _appointmentRespository.GetAppointment(changeAppointmentStatusDTO.Id!.Value);
 
             if(appointment == null)
             {
@@ -70,8 +75,7 @@ namespace EHRCoreAPI
 
             } 
 
-            appointment.Status = changeAppointmentStatusDTO.Status;
-            _db.SaveChanges();
+            _appointmentRespository.UpdateStatus(appointment, changeAppointmentStatusDTO.Status);
             return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}");
         }
     }

@@ -8,6 +8,7 @@ namespace EHRCoreAPI
         List<Appointment> GetClinicianAppointments(int clinicianID);
         List<Appointment> GetDepartmentAppointments(string department);
         void AddAndSaveAppointment(Appointment NewAppointment);
+        void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus);
 
     }
 }
