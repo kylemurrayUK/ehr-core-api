@@ -4,34 +4,34 @@ namespace EHRCoreAPI
     public class  AppointmentService
     {
 
-        private readonly ApiDbContext _db;
-        public AppointmentService(ApiDbContext db)
+        private readonly IAppointmentRespository _appointmentRespository;
+        public AppointmentService(IAppointmentRespository appointmentRespository)
         {
-            _db = db;
+            _appointmentRespository = appointmentRespository;
         }
 
         public List<Appointment> ListAppointments()
         {
-            return _db.Appointments.ToList();
+            return _appointmentRespository.GetAllAppointments();
         }
         
         public Appointment? GetAppointment(int id)
         {
-            return _db.Appointments.FirstOrDefault(a => a.Id == id);
+            return _appointmentRespository.GetAppointment(id);
         }
 
 
         public List<Appointment> GetPatientAppointments(int patientID)
         {
-            return _db.Appointments.Where(a => a.PatientId == patientID).ToList();
+            return _appointmentRespository.GetPatientAppointments(patientID);
         }
         public List<Appointment> GetClinicianAppointments(int clinicianID)
         {
-            return _db.Appointments.Where(a => a.ClinicianId == clinicianID).ToList();
+            return _appointmentRespository.GetClinicianAppointments(clinicianID);
         }
         public List<Appointment> GetDepartmentAppointments(string department)
         {
-            return _db.Appointments.Where(a => a.Department == department).ToList();
+            return _appointmentRespository.GetDepartmentAppointments(department);
         }
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
