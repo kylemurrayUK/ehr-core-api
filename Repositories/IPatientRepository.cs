@@ -1,6 +1,6 @@
 namespace EHRCoreAPI
 {
-    public interface IClinicianRepository
+    public interface IPatientRepository
     {
         
     }
