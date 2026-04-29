@@ -3,6 +3,10 @@ namespace EHRCoreAPI
     public class AppointmentRepository : IAppointmentRespository
     {
         private readonly ApiDbContext _db;
+        public AppointmentRepository(ApiDbContext db)
+        {
+            _db = db;
+        }
         public List<Appointment> GetAllAppointments()
         {
             return _db.Appointments.ToList();
