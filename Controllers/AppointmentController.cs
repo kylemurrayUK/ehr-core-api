@@ -34,7 +34,7 @@ namespace EHRCoreAPI
 
         //In a typical NHS system an id would be used here - this will be implemented in a later project.
         [HttpGet]
-        public ActionResult<List<Appointment>> GetAppointments( 
+        public ActionResult<List<Appointment>> GetAppointmentsBy( 
             [FromQuery] int? patientId,
             [FromQuery] int? clinicianId,
             [FromQuery] string? department)
