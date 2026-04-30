@@ -6,14 +6,14 @@ namespace EHRCoreAPI
         PatientSummaryDTO patientSummary, ClinicianSummaryDTO clinicianSummary)
         {
             ReturnAppointmentDTO returnAppointment = new ReturnAppointmentDTO
-            (
-                appointment.Id,
-                patientSummary,
-                clinicianSummary,
-                appointment.Department,
-                appointment.Status,
-                appointment.AppointmentTime
-            );
+            {
+                Id =appointment.Id,
+                PatientSummary = patientSummary,
+                ClinicianSummary = clinicianSummary,
+                Department = appointment.Department,
+                Status = appointment.Status,
+                AppointmentTime = appointment.AppointmentTime
+            };
 
             return returnAppointment;
         }

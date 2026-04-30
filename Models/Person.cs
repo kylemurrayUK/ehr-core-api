@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace EHRCoreAPI
 {
     // Inheriting for sucha a generic base class isn't conventional but I am adding it here 
@@ -7,6 +9,8 @@ namespace EHRCoreAPI
         public int Id {get; set;} 
         public string FirstName {get; set;} = string.Empty;
         public string LastName {get; set;} = string.Empty;
+        [NotMapped]
+        public string FullName => $"{FirstName} + {LastName}";
         public DateOnly Dob {get; set;}
 
 
