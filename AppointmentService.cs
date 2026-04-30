@@ -42,19 +42,22 @@ namespace EHRCoreAPI
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
-            if (_patientRespository.GetPatient(createAppointmentDTO.PatientId!.Value) == null)
+            var patient = _patientRespository.GetPatient(createAppointmentDTO.PatientId!.Value);
+            var clinician = _clinicianRespository.GetClinician(createAppointmentDTO.ClinicianId!.Value);
+            if (patient == null)
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
             }
-            if (_clinicianRespository.GetClinician(createAppointmentDTO.ClinicianId!.Value) == null)
+            if (clinician == null)
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }
-
+        
             Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
                                                           Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
             _appointmentRespository.AddAndSaveAppointment(newAppointment);
-            return CreateAppointmentStatus.Success(newAppointment);
+            ReturnAppointmentDTO returnAppointment = newAppointment.ToReturnDTO(patient.ToPatientSummary(), clinician.ToClinicianSummary()); 
+            return CreateAppointmentStatus.Success(returnAppointment);
         }
 
         // No delete method as in a medical context you would want to keep all appointments
