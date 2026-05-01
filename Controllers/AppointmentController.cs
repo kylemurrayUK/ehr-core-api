@@ -21,18 +21,19 @@ namespace EHRCoreAPI
         }
 
         [HttpGet("{Id}")]
-        public ActionResult<Appointment> GetAppointment(int id)
+        public ActionResult<ReturnAppointmentDTO> GetAppointment(int id)
         {
-            var appointment = _appointmentService.GetAppointment(id);
+            var appointment = _appointmentService.GetAppointmentWithDetails(id);
 
             if (appointment == null)
             {
                 return NotFound();
             }
-            return Ok(appointment);
+            var AppointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
+
+            return Ok(AppointmentResponse);
         }
 
-        //In a typical NHS system an id would be used here - this will be implemented in a later project.
         [HttpGet]
         public ActionResult<List<Appointment>> GetAppointmentsBy( 
             [FromQuery] int? patientId,
@@ -84,6 +85,7 @@ namespace EHRCoreAPI
             {
                 return BadRequest(ModelState);
             }
+
             CreateAppointmentStatus createAppointment = _appointmentService.AddAppointment(createAppointmentDTO);
 
             if (!createAppointment.WasSuccessful)

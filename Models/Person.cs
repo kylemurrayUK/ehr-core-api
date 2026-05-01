@@ -10,7 +10,7 @@ namespace EHRCoreAPI
         public string FirstName {get; set;} = string.Empty;
         public string LastName {get; set;} = string.Empty;
         [NotMapped]
-        public string FullName => $"{FirstName} + {LastName}";
+        public string FullName => $"{FirstName} {LastName}";
         public DateOnly Dob {get; set;}
 
 

@@ -4,6 +4,7 @@ namespace EHRCoreAPI
     {
         List<Appointment> GetAllAppointments();
         Appointment? GetAppointment(int id);
+        Appointment? GetAppointmentWithDetails(int id);
         List<Appointment> GetPatientAppointments(int patientID);
         List<Appointment> GetClinicianAppointments(int clinicianID);
         List<Appointment> GetDepartmentAppointments(string department);

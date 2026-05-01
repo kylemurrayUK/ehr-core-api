@@ -21,11 +21,10 @@ namespace EHRCoreAPI
             return _appointmentRespository.GetAllAppointments();
         }
         
-        public Appointment? GetAppointment(int id)
+        public Appointment? GetAppointmentWithDetails(int id)
         {
-            return _appointmentRespository.GetAppointment(id);
+            return _appointmentRespository.GetAppointmentWithDetails(id);
         }
-
 
         public List<Appointment> GetPatientAppointments(int patientID)
         {

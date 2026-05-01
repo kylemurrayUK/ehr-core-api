@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace EHRCoreAPI
 {
     public class AppointmentRepository : IAppointmentRespository
@@ -14,6 +16,11 @@ namespace EHRCoreAPI
         public Appointment? GetAppointment(int id)
         {
             return _db.Appointments.FirstOrDefault(a => a.Id == id);
+        }
+        public Appointment? GetAppointmentWithDetails(int id)
+        {
+            return _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician).FirstOrDefault(a => a.Id == id);
+            
         }
         public List<Appointment> GetPatientAppointments(int patientID)
         {
