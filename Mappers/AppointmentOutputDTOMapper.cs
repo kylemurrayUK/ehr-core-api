@@ -7,9 +7,9 @@ namespace EHRCoreAPI
         {
             ReturnAppointmentDTO returnAppointment = new ReturnAppointmentDTO
             {
-                Id =appointment.Id,
-                PatientSummary = patientSummary,
-                ClinicianSummary = clinicianSummary,
+                Id = appointment.Id,
+                Patient = patientSummary,
+                Clinician = clinicianSummary,
                 Department = appointment.Department,
                 Status = appointment.Status,
                 AppointmentTime = appointment.AppointmentTime
