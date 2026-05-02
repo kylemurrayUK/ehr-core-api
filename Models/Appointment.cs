@@ -17,7 +17,7 @@ namespace EHRCoreAPI
         [Required]
         public int PatientId {get; set;}
 
-        public Patient? Patient {get; set;}
+        public Patient Patient {get; set;} = null!;
 
         /// <summary>
         /// Department appointment is assigned to. Required field and is initalised empty.
@@ -31,7 +31,7 @@ namespace EHRCoreAPI
         [Required]
         public int ClinicianId {get; set;}
 
-        public Clinician? Clinician {get; set;}
+        public Clinician Clinician {get; set;}  = null!;
 
         /// <summary>
         /// Whether appointment is Pending, Completed, Cancelled or Entered in error

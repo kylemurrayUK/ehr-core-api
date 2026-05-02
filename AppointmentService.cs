@@ -41,6 +41,7 @@ namespace EHRCoreAPI
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
+            // ! used because both patient and clinician ID has been verified as not being null by the controller
             var patient = _patientRespository.GetPatient(createAppointmentDTO.PatientId!.Value);
             var clinician = _clinicianRespository.GetClinician(createAppointmentDTO.ClinicianId!.Value);
             if (patient == null)
@@ -51,7 +52,7 @@ namespace EHRCoreAPI
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }
-        
+            // ! used here as PatientId and clinicianID  have been validated as not null.
             Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
                                                           Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
             _appointmentRespository.AddAndSaveAppointment(newAppointment);
@@ -63,6 +64,7 @@ namespace EHRCoreAPI
         // - even cancelled ones - for auditing purposes.
         public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
+            // ! used here as changeAppointmentStatusDTO's id has been validated as not null by the controller
             var appointment = _appointmentRespository.GetAppointment(changeAppointmentStatusDTO.Id!.Value);
 
             if(appointment == null)
