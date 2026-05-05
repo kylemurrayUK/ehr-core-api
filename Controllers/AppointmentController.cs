@@ -27,8 +27,9 @@ namespace EHRCoreAPI
 
             if (appointment == null)
             {
-                return NotFound();
+                return NotFound($"Appointment with id {id} not found");
             }
+
             var AppointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
 
             return Ok(AppointmentResponse);
