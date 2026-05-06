@@ -1,6 +1,6 @@
 namespace EHRCoreAPI
 {
-    public interface IAppointmentRespository
+    public interface IAppointmentRepository
     {
         List<Appointment> GetAllAppointments();
         Appointment? GetAppointment(int id);
@@ -10,6 +10,11 @@ namespace EHRCoreAPI
         List<Appointment> GetDepartmentAppointments(string department);
         void AddAndSaveAppointment(Appointment NewAppointment);
         void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus);
+        public List<Appointment> GetAppointmentBy(int? patientId = null, int? clinicianId = null, 
+        string? department = null, string? patientName = null, string? clinicianName = null);
 
     }
-}
+
+ } 
+
+

@@ -4,11 +4,11 @@ namespace EHRCoreAPI
     public class  AppointmentService
     {
 
-        private readonly IAppointmentRespository _appointmentRespository;
+        private readonly IAppointmentRepository _appointmentRespository;
         private readonly IPatientRepository _patientRespository;
         private readonly IClinicianRepository _clinicianRespository;
 
-        public AppointmentService(IAppointmentRespository appointmentRespository, IPatientRepository patientRespository, 
+        public AppointmentService(IAppointmentRepository appointmentRespository, IPatientRepository patientRespository, 
                                   IClinicianRepository clinicianRespository)
         {
             _appointmentRespository = appointmentRespository;
@@ -20,12 +20,17 @@ namespace EHRCoreAPI
         {
             return _appointmentRespository.GetAllAppointments();
         }
-        
+
         public Appointment? GetAppointmentWithDetails(int id)
         {
             return _appointmentRespository.GetAppointmentWithDetails(id);
         }
 
+        public List<Appointment> GetAppointmentBy(int? patientId = null, int? clinicianId = null, 
+        string? department = null, string? patientName = null, string? clinicianName = null)
+        {
+            return _appointmentRespository.GetAppointmentBy(patientId, clinicianId, department, patientName, clinicianName);
+        }
         public List<Appointment> GetPatientAppointments(int patientID)
         {
             return _appointmentRespository.GetPatientAppointments(patientID);

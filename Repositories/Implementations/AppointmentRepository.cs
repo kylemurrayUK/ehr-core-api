@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EHRCoreAPI
 {
-    public class AppointmentRepository : IAppointmentRespository
+    public class AppointmentRepository : IAppointmentRepository
     {
         private readonly ApiDbContext _db;
         public AppointmentRepository(ApiDbContext db)
@@ -46,7 +46,7 @@ namespace EHRCoreAPI
         public List<Appointment> GetAppointmentBy(int? patientId = null, int? clinicianId = null, 
                                                   string? department = null, string? patientName = null, string? clinicianName = null)
     {
-        IQueryable<Appointment> query =  _db.Appointments;   
+        IQueryable<Appointment> query =  _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician);   
         if (patientId != null)
         {
             query = query.Where(a => a.PatientId == patientId.Value);
@@ -61,11 +61,11 @@ namespace EHRCoreAPI
         }
         if (patientName != null)
         {
-            query = query.Include(a => a.Patient).Where(a => a.Patient.FirstName.Contains(patientName) || a.Patient.LastName.Contains(patientName));
+            query = query.Where(a => a.Patient.FirstName.Contains(patientName) || a.Patient.LastName.Contains(patientName));
         } 
         if (clinicianName != null)
         {
-            query = query.Include(a => a.Clinician).Where(a => a.Clinician.FirstName.Contains(clinicianName) || a.Clinician.LastName.Contains(clinicianName));
+            query = query.Where(a => a.Clinician.FirstName.Contains(clinicianName) || a.Clinician.LastName.Contains(clinicianName));
         } 
         return query.ToList();
     }

@@ -1,9 +1,9 @@
 namespace EHRCoreAPI
 {
-    public class PatientRespository : IPatientRepository
+    public class PatientRepository : IPatientRepository
     {
         public ApiDbContext _db;
-        public PatientRespository(ApiDbContext db)
+        public PatientRepository(ApiDbContext db)
         {
             _db = db;
         }

@@ -11,9 +11,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddDbContext<ApiDbContext> (options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IAppointmentRespository, AppointmentRepository>();
-builder.Services.AddScoped<IClinicianRepository, ClinicianRespository>();
-builder.Services.AddScoped<IPatientRepository, PatientRespository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IClinicianRepository, ClinicianRepository>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

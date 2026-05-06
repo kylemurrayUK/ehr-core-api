@@ -16,7 +16,7 @@ namespace EHRCoreAPI
         [HttpGet]
         public ActionResult<List<Appointment>> ListAppointments()
         {
-            
+                        
             return Ok(_appointmentService.ListAppointments());
         }
 
@@ -36,13 +36,15 @@ namespace EHRCoreAPI
         }
 
         [HttpGet]
-        public ActionResult<List<Appointment>> GetAppointmentsBy( 
+        public ActionResult<List<ReturnAppointmentDTO>> GetAppointmentsBy( 
             [FromQuery] int? patientId,
             [FromQuery] int? clinicianId,
-            [FromQuery] string? department)
+            [FromQuery] string? department,
+            [FromQuery] string? patientName,
+            [FromQuery] string? clinicianName)
         {
             int parameterCounter = 0;
-            object?[] queryParameters = [patientId, clinicianId, department];
+            object?[] queryParameters = [patientId, clinicianId, department, patientName, clinicianName];
 
             foreach (object? parameter in queryParameters)
             {
@@ -56,27 +58,18 @@ namespace EHRCoreAPI
             {
                 return BadRequest("No query included");
             }
-            else if (parameterCounter > 1)
-            {
-                return BadRequest("More than one query parameter not allowed");
-            }
+
             
-            List<Appointment> queryResult = new List<Appointment>();
-
-            if (patientId != null)
+            List<Appointment> queryResult = _appointmentService.GetAppointmentBy(patientId, clinicianId, department,
+                                                                                patientName, clinicianName);
+            
+            List<ReturnAppointmentDTO> queryResponse = new List<ReturnAppointmentDTO>();
+            foreach (Appointment appointment in queryResult)
             {
-                queryResult = _appointmentService.GetPatientAppointments(patientId.Value);
+                queryResponse.Add(appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(),
+                 appointment.Clinician.ToClinicianSummary()));
             }
-            else if (clinicianId != null)
-            {
-                queryResult = _appointmentService.GetClinicianAppointments(clinicianId.Value);
-            }
-            else if (department != null)
-            {
-                queryResult = _appointmentService.GetDepartmentAppointments(department);
-            }
-
-            return Ok(queryResult);
+            return Ok(queryResponse);
         }
 
         [HttpPost]
