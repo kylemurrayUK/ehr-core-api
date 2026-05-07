@@ -16,6 +16,7 @@ namespace EHRCoreAPI
         /// Department appoint sits with
         /// </summary>
         [Required(ErrorMessage = "Department name is required.")]
+        [MaxLength(30)]
         public string Department {get; set;} = string.Empty;
         /// <summary>
         /// Clinician patient will be seeing
