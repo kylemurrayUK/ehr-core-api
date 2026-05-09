@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EHRCoreAPI
 {
@@ -41,10 +42,16 @@ namespace EHRCoreAPI
             [FromQuery] int? clinicianId,
             [FromQuery] string? department,
             [FromQuery] string? patientName,
-            [FromQuery] string? clinicianName)
+            [FromQuery] string? clinicianName,
+            [FromQuery] AppointmentStatus status)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             int parameterCounter = 0;
-            object?[] queryParameters = [patientId, clinicianId, department, patientName, clinicianName];
+            object?[] queryParameters = [patientId, clinicianId, department,
+                                         patientName, clinicianName, status];
 
             foreach (object? parameter in queryParameters)
             {
@@ -58,10 +65,10 @@ namespace EHRCoreAPI
             {
                 return BadRequest("No query included");
             }
-
+            FilterParameters filters = new FilterParameters(patientId, clinicianId, department,
+                                         patientName, clinicianName, status);
             
-            List<Appointment> queryResult = _appointmentService.GetAppointmentBy(patientId, clinicianId, department,
-                                                                                patientName, clinicianName);
+            List<Appointment> queryResult = _appointmentService.GetAppointmentBy(filters);
             
             List<ReturnAppointmentDTO> queryResponse = new List<ReturnAppointmentDTO>();
             foreach (Appointment appointment in queryResult)

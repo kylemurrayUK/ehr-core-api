@@ -21,18 +21,6 @@ namespace EHRCoreAPI
         {
             return _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician).FirstOrDefault(a => a.Id == id);
         }
-        public List<Appointment> GetPatientAppointments(int patientID)
-        {
-            return _db.Appointments.Where(a => a.PatientId == patientID).ToList();
-        }
-        public List<Appointment> GetClinicianAppointments(int clinicianID)
-        {
-            return _db.Appointments.Where(a => a.ClinicianId == clinicianID).ToList();
-        }
-        public List<Appointment> GetDepartmentAppointments(string department)
-        {
-            return _db.Appointments.Where(a => a.Department == department).ToList();
-        }
         public void AddAndSaveAppointment(Appointment newAppointment)
         {
             _db.Appointments.Add(newAppointment);
@@ -43,30 +31,33 @@ namespace EHRCoreAPI
             appointment.Status = newAppointmentStatus;
             _db.SaveChanges();
         }
-        public List<Appointment> GetAppointmentBy(int? patientId = null, int? clinicianId = null, 
-                                                  string? department = null, string? patientName = null, string? clinicianName = null)
+        public List<Appointment> GetAppointmentBy(FilterParameters filters)
     {
         IQueryable<Appointment> query =  _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician);   
-        if (patientId != null)
+        if (filters.PatientId != null)
         {
-            query = query.Where(a => a.PatientId == patientId.Value);
+            query = query.Where(a => a.PatientId == filters.PatientId.Value);
         } 
-        if (clinicianId != null)
+        if (filters.ClinicianId != null)
         {
-            query = query.Where(a => a.ClinicianId == clinicianId.Value);
+            query = query.Where(a => a.ClinicianId == filters.ClinicianId.Value);
         } 
-        if (department != null)
+        if (filters.Department != null)
         {
-            query = query.Where(a => a.Department == department);
+            query = query.Where(a => a.Department == filters.Department);
         }
-        if (patientName != null)
+        if (filters.PatientName != null)
         {
-            query = query.Where(a => a.Patient.FirstName.Contains(patientName) || a.Patient.LastName.Contains(patientName));
+            query = query.Where(a => a.Patient.FirstName.Contains(filters.PatientName) || a.Patient.LastName.Contains(filters.PatientName));
         } 
-        if (clinicianName != null)
+        if (filters.ClinicianName != null)
         {
-            query = query.Where(a => a.Clinician.FirstName.Contains(clinicianName) || a.Clinician.LastName.Contains(clinicianName));
+            query = query.Where(a => a.Clinician.FirstName.Contains(filters.ClinicianName) || a.Clinician.LastName.Contains(filters.ClinicianName));
         } 
+        if (filters.Status != null)
+        {
+            query = query.Where(a => a.Status == filters.Status);    
+        }
         return query.ToList();
     }
 
