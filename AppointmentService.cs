@@ -4,51 +4,39 @@ namespace EHRCoreAPI
     public class  AppointmentService
     {
 
-        private readonly IAppointmentRepository _appointmentRespository;
-        private readonly IPatientRepository _patientRespository;
-        private readonly IClinicianRepository _clinicianRespository;
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IClinicianRepository _clinicianRepository;
 
-        public AppointmentService(IAppointmentRepository appointmentRespository, IPatientRepository patientRespository, 
-                                  IClinicianRepository clinicianRespository)
+        public AppointmentService(IAppointmentRepository appointmentRepository, IPatientRepository patientRepository, 
+                                  IClinicianRepository clinicianRepository)
         {
-            _appointmentRespository = appointmentRespository;
-            _patientRespository = patientRespository;
-            _clinicianRespository = clinicianRespository;
+            _appointmentRepository = appointmentRepository;
+            _patientRepository = patientRepository;
+            _clinicianRepository = clinicianRepository;
         }
 
         public List<Appointment> ListAppointments()
         {
-            return _appointmentRespository.GetAllAppointments();
+            return _appointmentRepository.GetAllAppointments();
         }
 
         public Appointment? GetAppointmentWithDetails(int id)
         {
-            return _appointmentRespository.GetAppointmentWithDetails(id);
+            return _appointmentRepository.GetAppointmentWithDetails(id);
         }
 
-        public List<Appointment> GetAppointmentBy(int? patientId = null, int? clinicianId = null, 
-        string? department = null, string? patientName = null, string? clinicianName = null)
+        public List<Appointment> GetAppointmentBy(FilterParameters filters)
         {
-            return _appointmentRespository.GetAppointmentBy(patientId, clinicianId, department, patientName, clinicianName);
+            return _appointmentRepository.GetAppointmentBy(filters);
         }
-        public List<Appointment> GetPatientAppointments(int patientID)
-        {
-            return _appointmentRespository.GetPatientAppointments(patientID);
-        }
-        public List<Appointment> GetClinicianAppointments(int clinicianID)
-        {
-            return _appointmentRespository.GetClinicianAppointments(clinicianID);
-        }
-        public List<Appointment> GetDepartmentAppointments(string department)
-        {
-            return _appointmentRespository.GetDepartmentAppointments(department);
-        }
+
 
         public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
             // ! used because both patient and clinician ID has been verified as not being null by the controller
-            var patient = _patientRespository.GetPatient(createAppointmentDTO.PatientId!.Value);
-            var clinician = _clinicianRespository.GetClinician(createAppointmentDTO.ClinicianId!.Value);
+            var patient = _patientRepository.GetPatient(createAppointmentDTO.PatientId!.Value);
+            var clinician = _clinicianRepository.GetClinician(createAppointmentDTO.ClinicianId!.Value);
             if (patient == null)
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
@@ -60,7 +48,7 @@ namespace EHRCoreAPI
             // ! used here as PatientId and clinicianID  have been validated as not null.
             Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
                                                           Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
-            _appointmentRespository.AddAndSaveAppointment(newAppointment);
+            _appointmentRepository.AddAndSaveAppointment(newAppointment);
             ReturnAppointmentDTO returnAppointment = newAppointment.ToReturnDTO(patient.ToPatientSummary(), clinician.ToClinicianSummary()); 
             return CreateAppointmentStatus.Success(returnAppointment);
         }
@@ -70,7 +58,7 @@ namespace EHRCoreAPI
         public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
             // ! used here as changeAppointmentStatusDTO's id has been validated as not null by the controller
-            var appointment = _appointmentRespository.GetAppointment(changeAppointmentStatusDTO.Id!.Value);
+            var appointment = _appointmentRepository.GetAppointment(changeAppointmentStatusDTO.Id!.Value);
 
             if(appointment == null)
             {
@@ -84,7 +72,7 @@ namespace EHRCoreAPI
 
             } 
 
-            _appointmentRespository.UpdateStatus(appointment, changeAppointmentStatusDTO.Status);
+            _appointmentRepository.UpdateStatus(appointment, changeAppointmentStatusDTO.Status);
             return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}");
         }
     }

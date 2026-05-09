@@ -1,9 +1,9 @@
 namespace EHRCoreAPI
 {
-    public class FilterParamters
+    public class FilterParameters
     {
         
-        public FilterParamters (int? patientId, int? clinicianId, string? department, 
+        public FilterParameters (int? patientId, int? clinicianId, string? department, 
                                 string? patientName, string? clinicianName, AppointmentStatus? status)
         {
             PatientId = patientId;
