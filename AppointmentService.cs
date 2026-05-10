@@ -26,9 +26,9 @@ namespace EHRCoreAPI
             return await _appointmentRepository.GetAppointmentWithDetailsAsync(id);
         }
 
-        public List<Appointment> GetAppointmentBy(FilterParameters filters)
+        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters)
         {
-            return _appointmentRepository.GetAppointmentBy(filters);
+            return await _appointmentRepository.GetAppointmentByAsync(filters);
         }
 
 
@@ -72,7 +72,7 @@ namespace EHRCoreAPI
 
             } 
 
-            _appointmentRepository.UpdateStatus(appointment, changeAppointmentStatusDTO.Status);
+            await _appointmentRepository.UpdateStatus(appointment, changeAppointmentStatusDTO.Status);
             return (true, $"Appointment status successfully changed to {changeAppointmentStatusDTO.Status}");
         }
     }

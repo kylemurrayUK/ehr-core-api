@@ -6,8 +6,8 @@ namespace EHRCoreAPI
         Task<Appointment?> GetAppointmentAsync(int id);
         Task<Appointment?> GetAppointmentWithDetailsAsync(int id);
         Task AddAndSaveAppointmentAsync(Appointment NewAppointment);
-        void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus);
-        public List<Appointment> GetAppointmentBy(FilterParameters filters);
+        Task UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus);
+        Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters);
     }
 
  } 

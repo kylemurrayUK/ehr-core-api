@@ -37,7 +37,7 @@ namespace EHRCoreAPI
         }
 
         [HttpGet]
-        public ActionResult<List<ReturnAppointmentDTO>> GetAppointmentsBy( 
+        public async Task<ActionResult<List<ReturnAppointmentDTO>>> GetAppointmentsBy( 
             [FromQuery] int? patientId,
             [FromQuery] int? clinicianId,
             [FromQuery] string? department,
@@ -68,7 +68,7 @@ namespace EHRCoreAPI
             FilterParameters filters = new FilterParameters(patientId, clinicianId, department,
                                          patientName, clinicianName, status);
             
-            List<Appointment> queryResult = _appointmentService.GetAppointmentBy(filters);
+            List<Appointment> queryResult = await _appointmentService.GetAppointmentByAsync(filters);
             
             List<ReturnAppointmentDTO> queryResponse = new List<ReturnAppointmentDTO>();
             foreach (Appointment appointment in queryResult)

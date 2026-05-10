@@ -26,12 +26,12 @@ namespace EHRCoreAPI
             _db.Appointments.Add(newAppointment);
             await _db.SaveChangesAsync();
         }
-        public void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus)
+        public async Task UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus)
         {
             appointment.Status = newAppointmentStatus;
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
-        public List<Appointment> GetAppointmentBy(FilterParameters filters)
+        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters)
     {
         IQueryable<Appointment> query =  _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician);   
         if (filters.PatientId != null)
@@ -58,7 +58,7 @@ namespace EHRCoreAPI
         {
             query = query.Where(a => a.Status == filters.Status);    
         }
-        return query.ToList();
+        return await query.ToListAsync();
     }
 
     }
