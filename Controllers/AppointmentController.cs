@@ -80,14 +80,14 @@ namespace EHRCoreAPI
         }
 
         [HttpPost]
-        public IActionResult CreateAppointment([FromBody] CreateAppointmentDTO createAppointmentDTO)
+        public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentDTO createAppointmentDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            CreateAppointmentStatus createAppointment = await _appointmentService.AddAppointment(createAppointmentDTO);
+            CreateAppointmentStatus createAppointment = await _appointmentService.AddAppointmentAsync(createAppointmentDTO);
 
             if (!createAppointment.WasSuccessful)
             {
