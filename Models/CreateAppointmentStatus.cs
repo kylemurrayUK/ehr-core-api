@@ -3,17 +3,17 @@ namespace EHRCoreAPI
     public class CreateAppointmentStatus
     {
         public bool WasSuccessful {get;}
-        public ReturnAppointmentDTO? NewAppointment {get;}
+        public Appointment? NewAppointment {get;}
         public string? Message {get;}
 
-        private CreateAppointmentStatus(bool wasSuccessful, ReturnAppointmentDTO? appointment, string? message)
+        private CreateAppointmentStatus(bool wasSuccessful, Appointment? appointment, string? message)
         {
             WasSuccessful = wasSuccessful;
             NewAppointment = appointment;
             Message = message;
         }
 
-        public static CreateAppointmentStatus Success(ReturnAppointmentDTO appointment)
+        public static CreateAppointmentStatus Success(Appointment appointment)
         {
             return new CreateAppointmentStatus(true, appointment, null);
         }

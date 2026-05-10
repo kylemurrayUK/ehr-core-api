@@ -5,7 +5,7 @@ namespace EHRCoreAPI
         List<Appointment> GetAllAppointments();
         Appointment? GetAppointment(int id);
         Appointment? GetAppointmentWithDetails(int id);
-        void AddAndSaveAppointment(Appointment NewAppointment);
+        void AddAndSaveAppointmentAsync(Appointment NewAppointment);
         void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus);
         public List<Appointment> GetAppointmentBy(FilterParameters filters);
     }

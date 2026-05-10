@@ -43,7 +43,7 @@ namespace EHRCoreAPI
             [FromQuery] string? department,
             [FromQuery] string? patientName,
             [FromQuery] string? clinicianName,
-            [FromQuery] AppointmentStatus status)
+            [FromQuery] AppointmentStatus? status)
         {
             if (!ModelState.IsValid)
             {
@@ -60,11 +60,11 @@ namespace EHRCoreAPI
                     parameterCounter++;
                 }
             }
-
             if (parameterCounter == 0)
             {
                 return BadRequest("No query included");
             }
+
             FilterParameters filters = new FilterParameters(patientId, clinicianId, department,
                                          patientName, clinicianName, status);
             
@@ -87,14 +87,15 @@ namespace EHRCoreAPI
                 return BadRequest(ModelState);
             }
 
-            CreateAppointmentStatus createAppointment = _appointmentService.AddAppointment(createAppointmentDTO);
+            CreateAppointmentStatus createAppointment = await _appointmentService.AddAppointment(createAppointmentDTO);
 
             if (!createAppointment.WasSuccessful)
             {
                 return BadRequest(createAppointment.Message);
             }
-
-            return CreatedAtAction(nameof(GetAppointment), new {id = createAppointment.NewAppointment!.Id}, createAppointment.NewAppointment);
+            ReturnAppointmentDTO submittedAppointment = createAppointment.NewAppointment!.ToReturnDTO(createAppointment.NewAppointment!.Patient.ToPatientSummary(),
+                                                        createAppointment.NewAppointment!.Clinician.ToClinicianSummary());
+            return CreatedAtAction(nameof(GetAppointment), new {id = submittedAppointment.Id}, submittedAppointment);
         }
 
         [HttpPatch]

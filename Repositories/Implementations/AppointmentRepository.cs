@@ -21,10 +21,10 @@ namespace EHRCoreAPI
         {
             return _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician).FirstOrDefault(a => a.Id == id);
         }
-        public void AddAndSaveAppointment(Appointment newAppointment)
+        public async Task AddAndSaveAppointmentAsync(Appointment newAppointment)
         {
             _db.Appointments.Add(newAppointment);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
         public void UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus)
         {

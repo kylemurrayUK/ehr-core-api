@@ -32,7 +32,7 @@ namespace EHRCoreAPI
         }
 
 
-        public CreateAppointmentStatus AddAppointment(CreateAppointmentDTO createAppointmentDTO)
+        public async Task<CreateAppointmentStatus> AddAppointment(CreateAppointmentDTO createAppointmentDTO)
         {
             // ! used because both patient and clinician ID has been verified as not being null by the controller
             var patient = _patientRepository.GetPatient(createAppointmentDTO.PatientId!.Value);
@@ -48,9 +48,9 @@ namespace EHRCoreAPI
             // ! used here as PatientId and clinicianID  have been validated as not null.
             Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
                                                           Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
-            _appointmentRepository.AddAndSaveAppointment(newAppointment);
-            ReturnAppointmentDTO returnAppointment = newAppointment.ToReturnDTO(patient.ToPatientSummary(), clinician.ToClinicianSummary()); 
-            return CreateAppointmentStatus.Success(returnAppointment);
+            await _appointmentRepository.AddAndSaveAppointmentAsync(newAppointment);
+
+            return CreateAppointmentStatus.Success(newAppointment);
         }
 
         // No delete method as in a medical context you would want to keep all appointments
