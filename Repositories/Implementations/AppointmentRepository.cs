@@ -9,17 +9,17 @@ namespace EHRCoreAPI
         {
             _db = db;
         }
-        public List<Appointment> GetAllAppointments()
+        public async Task<List<Appointment>> GetAllAppointmentsAsync()
         {
-            return _db.Appointments.ToList();
+            return await _db.Appointments.ToListAsync();        
         }
-        public Appointment? GetAppointment(int id)
+        public async Task<Appointment?> GetAppointmentAsync(int id)
         {
-            return _db.Appointments.FirstOrDefault(a => a.Id == id);
+            return await _db.Appointments.FirstOrDefaultAsync(a => a.Id == id);
         }
-        public Appointment? GetAppointmentWithDetails(int id)
+        public async Task<Appointment?> GetAppointmentWithDetailsAsync(int id)
         {
-            return _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician).FirstOrDefault(a => a.Id == id);
+            return await _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician).FirstOrDefaultAsync(a => a.Id == id);
         }
         public async Task AddAndSaveAppointmentAsync(Appointment newAppointment)
         {

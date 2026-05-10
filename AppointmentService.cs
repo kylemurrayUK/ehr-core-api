@@ -16,14 +16,14 @@ namespace EHRCoreAPI
             _clinicianRepository = clinicianRepository;
         }
 
-        public List<Appointment> ListAppointments()
+        public async Task<List<Appointment>> ListAppointmentsAsync()
         {
-            return _appointmentRepository.GetAllAppointments();
+            return await _appointmentRepository.GetAllAppointmentsAsync();
         }
 
-        public Appointment? GetAppointmentWithDetails(int id)
+        public async Task<Appointment?> GetAppointmentWithDetailsAsync(int id)
         {
-            return _appointmentRepository.GetAppointmentWithDetails(id);
+            return await _appointmentRepository.GetAppointmentWithDetailsAsync(id);
         }
 
         public List<Appointment> GetAppointmentBy(FilterParameters filters)
@@ -55,10 +55,10 @@ namespace EHRCoreAPI
 
         // No delete method as in a medical context you would want to keep all appointments
         // - even cancelled ones - for auditing purposes.
-        public (bool wasSuccessful, string message) ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
+        public async Task<(bool wasSuccessful, string message)> ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
             // ! used here as changeAppointmentStatusDTO's id has been validated as not null by the controller
-            var appointment = _appointmentRepository.GetAppointment(changeAppointmentStatusDTO.Id!.Value);
+            var appointment = await _appointmentRepository.GetAppointmentAsync(changeAppointmentStatusDTO.Id!.Value);
 
             if(appointment == null)
             {

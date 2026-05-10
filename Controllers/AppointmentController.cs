@@ -15,16 +15,16 @@ namespace EHRCoreAPI
         }
 
         [HttpGet]
-        public ActionResult<List<Appointment>> ListAppointments()
+        public async Task<ActionResult<List<Appointment>>> ListAppointments()
         {
                         
-            return Ok(_appointmentService.ListAppointments());
+            return Ok(await _appointmentService.ListAppointmentsAsync());
         }
 
         [HttpGet("{Id}")]
-        public ActionResult<ReturnAppointmentDTO> GetAppointment(int id)
+        public async Task<ActionResult<ReturnAppointmentDTO>> GetAppointment(int id)
         {
-            var appointment = _appointmentService.GetAppointmentWithDetails(id);
+            var appointment = await _appointmentService.GetAppointmentWithDetailsAsync(id);
 
             if (appointment == null)
             {
@@ -99,9 +99,9 @@ namespace EHRCoreAPI
         }
 
         [HttpPatch]
-        public IActionResult ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
+        public async Task<IActionResult> ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
-            var changeOutcome = _appointmentService.ChangeAppointmentStatus(changeAppointmentStatusDTO);
+            var changeOutcome = await _appointmentService.ChangeAppointmentStatus(changeAppointmentStatusDTO);
             if (changeOutcome.wasSuccessful == false)
             {
                 return NotFound(changeOutcome.message);
