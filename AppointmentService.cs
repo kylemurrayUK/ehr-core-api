@@ -35,8 +35,8 @@ namespace EHRCoreAPI
         public async Task<CreateAppointmentStatus> AddAppointmentAsync(CreateAppointmentDTO createAppointmentDTO)
         {
             // ! used because both patient and clinician ID has been verified as not being null by the controller
-            var patient = _patientRepository.GetPatient(createAppointmentDTO.PatientId!.Value);
-            var clinician = _clinicianRepository.GetClinician(createAppointmentDTO.ClinicianId!.Value);
+            var patient = await _patientRepository.GetPatientAsync(createAppointmentDTO.PatientId!.Value);
+            var clinician = await _clinicianRepository.GetClinicianAsync(createAppointmentDTO.ClinicianId!.Value);
             if (patient == null)
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");

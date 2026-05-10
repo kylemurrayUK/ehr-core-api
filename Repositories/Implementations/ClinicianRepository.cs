@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace EHRCoreAPI
 {
     public class ClinicianRepository : IClinicianRepository
@@ -7,9 +9,9 @@ namespace EHRCoreAPI
         {
             _db = db;
         }
-        public Clinician? GetClinician(int ClinicianId)
+        public async Task<Clinician?> GetClinicianAsync(int ClinicianId)
         {
-            return _db.Clinicians.FirstOrDefault(c => c.Id == ClinicianId);
+            return await _db.Clinicians.FirstOrDefaultAsync(c => c.Id == ClinicianId);
         }
     }
 }
