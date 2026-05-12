@@ -8,7 +8,7 @@ namespace EHRCoreAPI
             {
                 Id = clinician.Id,
                 Name = clinician.FullName,
-                Speciality = clinician.Specialty
+                Specialty = clinician.Specialty
             };
         }
     }
