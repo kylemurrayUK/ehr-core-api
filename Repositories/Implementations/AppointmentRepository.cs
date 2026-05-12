@@ -11,7 +11,7 @@ namespace EHRCoreAPI
         }
         public async Task<List<Appointment>> GetAllAppointmentsAsync()
         {
-            return await _db.Appointments.ToListAsync();        
+            return await _db.Appointments.Include(a => a.Clinician).Include(a => a.Patient).ToListAsync();        
         }
         public async Task<Appointment?> GetAppointmentAsync(int id)
         {
