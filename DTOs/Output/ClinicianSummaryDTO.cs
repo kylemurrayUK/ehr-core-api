@@ -4,6 +4,6 @@ namespace EHRCoreAPI
     {
         public int Id {get; set;}
         public string Name {get; init;} = string.Empty;
-        public string Speciality {get; init;} = string.Empty;
+        public string Specialty  {get; init;} = string.Empty;
     }
 }

@@ -1,7 +1,7 @@
 # ehr-core-api
 
 ## Overview
-An ASP.NET web api for managing appointments which is RESTful compliant with an external SQL database handled with Entity Framework Core. The project also includes patient and clinicians with seeding data that runs on start-up. There is also a repository layer implemented with interfaces for easier testing later in the roadmap. There is also basic implementation of asynchronousity.
+Project 4 on my C# Backend development roadmap. An ASP.NET web api for managing appointments which is RESTful  with an external SQL database handled with Entity Framework Core. The project also includes patient and clinicians with seeding data that runs on start-up. There is also a repository layer implemented with interfaces for easier testing later in the roadmap. There is also basic implementation of asynchronousity.
 
 
 ## Features
@@ -16,7 +16,6 @@ All the above are implemented using HTTP requests. Please see How to Run for spe
 
 ## Technical Highlights
  - Implementation of Entity Framework Core with DbContext and database constraints using the fluent API + conventions with a code first approach.
- - Foreign keys implemented with 
  - Asynchronous methods
  - Output DTO's that have mapper extension classes for providing patient and clinician names for each appointment.
  - Dbseeder class for default data that checks for data and if database is empty inputs base data.
@@ -32,6 +31,7 @@ All the above are implemented using HTTP requests. Please see How to Run for spe
 Below are some design decisions that are worth explaining
  - Some ! were used throughout to silence compiler null warnings. This is due to the service layer accepting null value types on data that has already been validated in the controller layer. In the future separate command models could be implemented to push validation back into the controller layer.
  - A delete request is noticeably absent from the http methods implemented. This is because in a medical context you wouldn't want data being deleted entirely for auditing purposes. I decided instead have an EnteredInError status code to keep the implementation domain appropriate.
+ - Further to the above point, restricted deletion has been added to the foreign key.
  - No controllers have been implemented for handling patient and clinicians yet. However, this is likely to come in a further project.
  - Self-implemented mappers have been used as extension methods as these allow for compile time errors, which wouldn't be the case if AutoMapper was used. 
  

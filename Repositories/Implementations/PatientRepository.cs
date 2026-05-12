@@ -9,7 +9,7 @@ namespace EHRCoreAPI
         {
             _db = db;
         }
-        public async Task<Patient?> GetPatient(int PatientId)
+        public async Task<Patient?> GetPatientAsync(int PatientId)
         {
             return await _db.Patients.FirstOrDefaultAsync(p => p.Id == PatientId);
         }
