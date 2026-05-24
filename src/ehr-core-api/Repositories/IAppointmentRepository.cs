@@ -1,4 +1,6 @@
-namespace EHRCoreAPI
+using EHRCoreAPI.Models;
+
+namespace EHRCoreAPI.Repositories
 {
     public interface IAppointmentRepository
     {

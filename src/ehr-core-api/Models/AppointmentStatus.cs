@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Models
 {
     /// <summary>
     /// Enum for Appointment status

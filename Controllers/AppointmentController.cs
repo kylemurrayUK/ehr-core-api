@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using EHRCoreAPI.Dtos;
-using EHRCoreAPI.Mappers;
-using EHRCoreAPI.Models;
-using EHRCoreAPI.Dtos.Output;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace EHRCoreAPI.Controllers
+namespace EHRCoreAPI
 {
 
     [Route("api/[controller]/[action]")]

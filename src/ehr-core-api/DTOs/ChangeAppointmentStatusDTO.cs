@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using EHRCoreAPI.Models;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Dtos.Output
 {
     /// <summary>
     /// Object that contains information needed to alter an appointments status

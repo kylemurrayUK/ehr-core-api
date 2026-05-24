@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Models
 {
     /// <summary>
     /// Object that represents appointments and contains all information needed to manage them.

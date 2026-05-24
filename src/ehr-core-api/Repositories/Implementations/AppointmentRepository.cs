@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using EHRCoreAPI.Data;
+using EHRCoreAPI.Models;
 
-namespace EHRCoreAPI
+
+namespace EHRCoreAPI.Repositories.Implementations
 {
     public class AppointmentRepository : IAppointmentRepository
     {

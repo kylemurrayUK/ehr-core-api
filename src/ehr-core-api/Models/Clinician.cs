@@ -1,4 +1,4 @@
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Models
 {
     public class Clinician : Person
     {

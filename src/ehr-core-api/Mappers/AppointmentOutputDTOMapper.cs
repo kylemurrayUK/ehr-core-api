@@ -1,4 +1,7 @@
-namespace EHRCoreAPI
+using EHRCoreAPI.Models;
+using EHRCoreAPI.Dtos;
+
+namespace EHRCoreAPI.Mappers
 {
     public static class AppointmentOutputDTOMapper
     {

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using EHRCoreAPI.Models;
+using EHRCoreAPI.Data;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Repositories.Implementations
 {
     public class ClinicianRepository : IClinicianRepository
     {

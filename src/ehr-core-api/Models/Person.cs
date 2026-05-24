@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Models
 {
     // Inheriting for sucha a generic base class isn't conventional but I am adding it here 
     // to get some exposure to inheritance as it doesn't come up elsewhere in my roadmap.

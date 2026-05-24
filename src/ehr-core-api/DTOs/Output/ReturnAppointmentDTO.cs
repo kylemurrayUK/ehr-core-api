@@ -1,4 +1,6 @@
-namespace EHRCoreAPI
+using EHRCoreAPI.Models;
+
+namespace EHRCoreAPI.Dtos
 {
     public class ReturnAppointmentDTO
     {

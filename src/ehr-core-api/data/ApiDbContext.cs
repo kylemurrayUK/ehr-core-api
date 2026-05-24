@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
+using EHRCoreAPI.Models;
 
-namespace EHRCoreAPI
+namespace EHRCoreAPI.Data
 {
     public class ApiDbContext : DbContext
     {
