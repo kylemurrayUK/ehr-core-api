@@ -1,6 +1,6 @@
 using EHRCoreAPI.Models;
 
-namespace EHRCoreAPI.Dtos
+namespace EHRCoreAPI.Dtos.Output
 {
     public class ReturnAppointmentDTO
     {

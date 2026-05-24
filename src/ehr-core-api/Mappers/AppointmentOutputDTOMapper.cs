@@ -1,5 +1,5 @@
 using EHRCoreAPI.Models;
-using EHRCoreAPI.Dtos;
+using EHRCoreAPI.Dtos.Output;
 
 namespace EHRCoreAPI.Mappers
 {

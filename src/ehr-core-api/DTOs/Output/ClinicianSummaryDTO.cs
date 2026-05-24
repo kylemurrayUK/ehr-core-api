@@ -1,4 +1,4 @@
-namespace EHRCoreAPI.Dtos
+namespace EHRCoreAPI.Dtos.Output
 {
     public class ClinicianSummaryDTO
     {

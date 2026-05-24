@@ -1,5 +1,8 @@
 
 using System.Data.Common;
+using EHRCoreAPI.Repositories.Implementations;
+using EHRCoreAPI.Repositories;
+using EHRCoreAPI.Data;
 using EHRCoreAPI;
 using Microsoft.EntityFrameworkCore;
 

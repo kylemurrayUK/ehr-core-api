@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using EHRCoreAPI.Dtos;
+using EHRCoreAPI.Dtos.Output;
 using EHRCoreAPI.Mappers;
 using EHRCoreAPI.Models;
-using EHRCoreAPI.Dtos.Output;
 
 namespace EHRCoreAPI.Controllers
 {

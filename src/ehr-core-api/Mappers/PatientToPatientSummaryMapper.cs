@@ -1,4 +1,7 @@
-namespace EHRCoreAPI
+using EHRCoreAPI.Dtos.Output;
+using EHRCoreAPI.Models;
+
+namespace EHRCoreAPI.Mappers
 {
     public static class PatientToPatientSummaryMapper
     {

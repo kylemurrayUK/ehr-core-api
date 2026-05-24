@@ -1,3 +1,8 @@
+using EHRCoreAPI.Dtos;
+using EHRCoreAPI.Mappers;
+using EHRCoreAPI.Models;
+using EHRCoreAPI.Repositories;
+using EHRCoreAPI.Dtos.Output;
 
 namespace EHRCoreAPI
 {
