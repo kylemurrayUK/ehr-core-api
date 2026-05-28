@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ehr-core-api", "src\ehr-cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C88DD14-F956-CE84-757C-A364CCF449FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ehr-core-api.Tests", "test\ehr-core-api.Tests\ehr-core-api.Tests.csproj", "{89917ABF-965F-4BB3-8F09-4DDA6035E920}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ehr-core-api.UnitTests", "ehr-core-api.UnitTests", "{76E74C59-75C3-4DD4-F0BE-05D61AB54EE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ehr-core-api.Tests", "test\ehr-core-api.UnitTests\ehr-core-api.Tests.csproj", "{864B48BA-2CB4-4731-9659-48CA7DF1F19F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,25 +35,26 @@ Global
 		{854F6274-133A-460D-B305-B059EE1810F9}.Release|x64.Build.0 = Release|Any CPU
 		{854F6274-133A-460D-B305-B059EE1810F9}.Release|x86.ActiveCfg = Release|Any CPU
 		{854F6274-133A-460D-B305-B059EE1810F9}.Release|x86.Build.0 = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|x64.Build.0 = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Debug|x86.Build.0 = Debug|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|x64.ActiveCfg = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|x64.Build.0 = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|x86.ActiveCfg = Release|Any CPU
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920}.Release|x86.Build.0 = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|x64.Build.0 = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Debug|x86.Build.0 = Debug|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|x64.ActiveCfg = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|x64.Build.0 = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|x86.ActiveCfg = Release|Any CPU
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{854F6274-133A-460D-B305-B059EE1810F9} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{89917ABF-965F-4BB3-8F09-4DDA6035E920} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
+		{76E74C59-75C3-4DD4-F0BE-05D61AB54EE0} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
+		{864B48BA-2CB4-4731-9659-48CA7DF1F19F} = {76E74C59-75C3-4DD4-F0BE-05D61AB54EE0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE14169E-0488-40EF-A553-7BAD42970B28}
