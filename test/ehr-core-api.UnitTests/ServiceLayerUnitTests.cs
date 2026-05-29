@@ -31,6 +31,8 @@ public class ServiceLayerUnitTests
     [Fact]
     public async Task ChangeAppointmentStatus_NullAppointment_ReturnsFailureWithMessage()
     {
+
+        // Arrange
         _mockAppointmentRepo
             .Setup(mock => mock.GetAppointmentAsync(1))
             .ReturnsAsync((Appointment?)null);
@@ -41,8 +43,10 @@ public class ServiceLayerUnitTests
             Status = AppointmentStatus.Completed
         };
 
+        // Act
         var result = await _appointmentService.ChangeAppointmentStatus(mockChangeAppointmentDTO);
 
+        // Assert
          Assert.True(!result.wasSuccessful);
          Assert.Equal("Appointment not found", result.message);
     }
@@ -50,9 +54,9 @@ public class ServiceLayerUnitTests
         [Fact]
         public async Task ChangeAppointmentStatus_AlreadySameStatus_ReturnsSuccessWithAlreadyStatusMessage()
     {
-        _mockAppointmentRepo
-            .Setup(mock => mock.GetAppointmentAsync(5))
-            .ReturnsAsync(new Appointment
+
+        //Arrange
+        Appointment mockAppointment = new Appointment
             {
                 Id = 5,
                 PatientId = 1,
@@ -60,7 +64,11 @@ public class ServiceLayerUnitTests
                 ClinicianId = 1,
                 Status = AppointmentStatus.EnteredInError,
                 AppointmentTime = new DateTime(2026, 5, 5, 14, 0, 0)
-            });
+            } ;
+
+        _mockAppointmentRepo
+            .Setup(mock => mock.GetAppointmentAsync(5))
+            .ReturnsAsync(mockAppointment);
 
         var mockChangeAppointmentDTO = new ChangeAppointmentStatusDTO
         {
@@ -68,8 +76,11 @@ public class ServiceLayerUnitTests
             Status = AppointmentStatus.EnteredInError
         };
 
+        // Act
         var result = await _appointmentService.ChangeAppointmentStatus(mockChangeAppointmentDTO);
 
+        // Assert
+        _mockAppointmentRepo.Verify(mock => mock.UpdateStatus(It.IsAny<Appointment>(), It.IsAny<AppointmentStatus>()), Times.Never);
          Assert.True(result.wasSuccessful);
          Assert.Equal("Appointment was already EnteredInError.\nAppointment Status : EnteredInError", result.message);
     }
@@ -77,17 +88,21 @@ public class ServiceLayerUnitTests
         [Fact]
         public async Task ChangeAppointmentStatus_SuccessfullyChanged_ReturnsSuccessWithSuccessMessage()
     {
-        _mockAppointmentRepo
-            .Setup(mock => mock.GetAppointmentAsync(4))
-            .ReturnsAsync(new Appointment
+
+        // Arrange
+        Appointment mockAppointment = new Appointment
             {
                 Id = 4,
                 PatientId = 2,
                 Department = "Test",
                 ClinicianId = 3,
-                Status = AppointmentStatus.EnteredInError,
+                Status = AppointmentStatus.Pending,
                 AppointmentTime = new DateTime(2026, 10, 5, 20, 0, 0)
-            });
+            } ;
+
+        _mockAppointmentRepo
+            .Setup(mock => mock.GetAppointmentAsync(4))
+            .ReturnsAsync(mockAppointment);
 
         var mockChangeAppointmentDTO = new ChangeAppointmentStatusDTO
         {
@@ -95,7 +110,11 @@ public class ServiceLayerUnitTests
             Status = AppointmentStatus.Completed
         };
 
+        // Act
         var result = await _appointmentService.ChangeAppointmentStatus(mockChangeAppointmentDTO);
+
+        // Assert
+        _mockAppointmentRepo.Verify(mock => mock.UpdateStatus(mockAppointment, mockChangeAppointmentDTO.Status), Times.Once);
 
          Assert.True(result.wasSuccessful); 
          Assert.Equal("Appointment status successfully changed to Completed", result.message);
