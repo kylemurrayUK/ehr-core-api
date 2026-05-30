@@ -2,6 +2,7 @@
 using EHRCoreAPI;
 using EHRCoreAPI.Models;
 using EHRCoreAPI.Dtos;
+using System.Data.Common;
 
 
 
@@ -26,6 +27,33 @@ public class ServiceLayerUnitTests
             _mockPatientRepo.Object,
             _mockClinicianRepo.Object
         );
+    }
+
+    // GetAppointmentsBy Unit Tests
+    [Fact]
+    public async Task GetAppointmentByAsync_RepositoryLayerCalled_ReturnsListOfAppointments()
+    {
+        // Arrange
+        List<Appointment> mockAppointmentsList = new List<Appointment>
+        {
+            new Appointment { Id = 1, ClinicianId = 1, PatientId = 1, Status = AppointmentStatus.Completed, Department = "Test Department1", AppointmentTime = new DateTime(2026, 5, 10, 14, 0, 0)},
+            new Appointment { Id = 2, ClinicianId = 1, PatientId = 1, Status = AppointmentStatus.Completed, Department = "Test Department2", AppointmentTime = new DateTime(2024, 6, 16, 10, 30, 0)},
+            new Appointment { Id = 3, ClinicianId = 1, PatientId = 1, Status = AppointmentStatus.Completed, Department = "Test Department3", AppointmentTime = new DateTime(2010, 6, 16, 10, 30, 0)},
+        };
+        _mockAppointmentRepo.Setup(mock => mock.GetAppointmentByAsync(It.Is<FilterParameters>(f => f.ClinicianId == 1 
+                                                                                              && f.PatientId == 1
+                                                                                              && f.Status == AppointmentStatus.Completed))).ReturnsAsync(mockAppointmentsList);
+        FilterParameters mockFilters = new FilterParameters(1, 1, null, null, null, AppointmentStatus.Completed);
+
+        // Act
+        var result = await _appointmentService.GetAppointmentByAsync(mockFilters);
+
+        // Assert
+
+        _mockAppointmentRepo.Verify(mock => mock.GetAppointmentByAsync(It.Is<FilterParameters>(f => f.ClinicianId == 1 
+                                                                                              && f.PatientId == 1
+                                                                                              && f.Status == AppointmentStatus.Completed)), Times.Once);
+        Assert.Equal(mockAppointmentsList, result);
     }
 
     // Add Appointment Unit Tests
