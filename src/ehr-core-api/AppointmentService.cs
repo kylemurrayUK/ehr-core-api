@@ -21,16 +21,9 @@ namespace EHRCoreAPI
             _clinicianRepository = clinicianRepository;
         }
 
-        public async Task<List<ReturnAppointmentDTO>> ListAppointmentsAsync()
+        public async Task<List<Appointment>> ListAppointmentsAsync()
         {
-            List<Appointment> allAppointments = await _appointmentRepository.GetAllAppointmentsAsync();
-            List<ReturnAppointmentDTO> allAppointmentsAsDTOs = new List<ReturnAppointmentDTO>();
-
-            foreach (Appointment appointment in allAppointments)
-            {
-                allAppointmentsAsDTOs.Add(appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(), appointment.Clinician.ToClinicianSummary()));
-            }
-            return allAppointmentsAsDTOs;
+            return await _appointmentRepository.GetAllAppointmentsAsync();
         }
 
         public async Task<Appointment?> GetAppointmentWithDetailsAsync(int id)

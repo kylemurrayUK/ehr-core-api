@@ -20,8 +20,15 @@ namespace EHRCoreAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Appointment>>> ListAppointments()
         {
-                        
-            return Ok(await _appointmentService.ListAppointmentsAsync());
+            List<Appointment> allAppointments = await _appointmentService.ListAppointmentsAsync();
+            List<ReturnAppointmentDTO> allAppointmentsAsDTOs = new List<ReturnAppointmentDTO>();
+
+            foreach (Appointment appointment in allAppointments)
+            {
+                allAppointmentsAsDTOs.Add(appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(), appointment.Clinician.ToClinicianSummary()));
+            }
+                       
+            return Ok(allAppointmentsAsDTOs);
         }
 
         [HttpGet("{Id}")]
