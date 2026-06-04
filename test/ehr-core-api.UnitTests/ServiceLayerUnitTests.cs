@@ -29,7 +29,7 @@ public class ServiceLayerUnitTests
         );
     }
 
-    // GetAppointmentsBy and GetAppointmentWithDetails methods will be covered by integration testing at the repository layer
+    // ListAppointments , GetAppointmentsBy and GetAppointmentWithDetails methods will be covered by integration testing at the repository layer
     // These are essentially pass through methods that contain no logic so are inappropriate for unit testing.
 
 
