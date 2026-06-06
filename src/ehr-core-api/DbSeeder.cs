@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using EHRCoreAPI.Models;
 using EHRCoreAPI.Data;
 
