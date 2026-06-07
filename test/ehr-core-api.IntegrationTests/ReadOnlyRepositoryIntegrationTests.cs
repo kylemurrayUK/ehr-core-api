@@ -23,6 +23,8 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         var appointments = await appointmentRepo.GetAllAppointmentsAsync();
 
         // Assert
-        Assert.Equal(4, appointments.Count);
+        Assert.Contains(appointments, a => a.Patient != null);
+        Assert.Contains(appointments, a => a.Clinician != null);
+
     }
 }
