@@ -13,7 +13,7 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
 
     }
     [Fact]
-    public async Task GetAllAppointments_RetrieveAllAppointments_ReturnListOfAllAppointments()
+    public async Task GetAllAppointments_ReturnListOfAllAppointments()
     {
         // Arrange
         using var context = Fixture.CreateContext();
@@ -23,8 +23,11 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         var appointments = await appointmentRepo.GetAllAppointmentsAsync();
 
         // Assert
-        Assert.Contains(appointments, a => a.Patient != null);
-        Assert.Contains(appointments, a => a.Clinician != null);
-
+        Assert.All(appointments, a => 
+        {
+            Assert.NotNull(a.Patient);
+            Assert.NotNull(a.Clinician);
+        });
+        Assert.Equal(Fixture.SeededData.appointments.Count, appointments.Count);
     }
 }
