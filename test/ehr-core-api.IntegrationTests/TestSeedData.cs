@@ -35,7 +35,9 @@ public class TestSeedData
                 new Appointment { Patient = patients[0], Clinician = clinicians[1], Department = "Cardiology",       Status = AppointmentStatus.Pending,        AppointmentTime = new DateTime(2026, 6, 15, 9, 0, 0) },
                 new Appointment { Patient = patients[1], Clinician = clinicians[0], Department = "Surgery",          Status = AppointmentStatus.Completed,      AppointmentTime = new DateTime(2026, 6, 16, 10, 30, 0) },
                 new Appointment { Patient = patients[2], Clinician = clinicians[2], Department = "Gastrointestinal", Status = AppointmentStatus.Cancelled,      AppointmentTime = new DateTime(2026, 6, 17, 14, 0, 0) },
-                new Appointment { Patient = patients[3], Clinician = clinicians[3], Department = "Pharmacology",     Status = AppointmentStatus.EnteredInError, AppointmentTime = new DateTime(2026, 6, 18, 11, 15, 0) }
+                new Appointment { Patient = patients[3], Clinician = clinicians[3], Department = "Pharmacology",     Status = AppointmentStatus.EnteredInError, AppointmentTime = new DateTime(2026, 6, 18, 11, 15, 0) },
+                new Appointment { Patient = patients[2], Clinician = clinicians[3], Department = "Pharmacology",     Status = AppointmentStatus.EnteredInError, AppointmentTime = new DateTime(2026, 6, 18, 11, 15, 0) }
+            
             };
             _db.Appointments.AddRange(appointments);
 
