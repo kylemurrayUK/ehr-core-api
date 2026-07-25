@@ -31,6 +31,28 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         });
         Assert.Equal(Fixture.SeededData.appointments.Count, appointments.Count);
     }
+    
+    // GetAppointmentBy Unit Tests
+    [Fact]
+    public async Task GetAppointmentsBy_SearchingOnPatientId_ReturnAppointmentsWithMatchingPatient()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        Patient patientSearchedFor = Fixture.SeededData.patients[2];
+        var patientTestFilter = new FilterParameters(patientId: patientSearchedFor.Id,null, null, null, null, null);
+        
+        // Act
+        var appointments = await appointmentRepo.GetAppointmentByAsync(patientTestFilter);
+
+        // Assert
+        Assert.Equal(2, appointments.Count);
+        Assert.All(appointments, a => 
+        {
+            Assert.Equal( patientSearchedFor.Id, a.PatientId);
+        });
+    }
+
     [Fact]
     public async Task GetAppointmentsBy_SearchingOnClinicianId_ReturnAppointmentsWithMatchingClinician()
     {
@@ -49,6 +71,6 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         {
             Assert.Equal( clinicianSearchedFor.Id, a.ClinicianId);
         });
-
     }
+
 }
