@@ -39,7 +39,7 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         // Arrange
         using var context = Fixture.CreateContext();
         var appointmentRepo = new AppointmentRepository(context);
-        Patient patientSearchedFor = Fixture.SeededData.patients[2];
+        Patient patientSearchedFor = Fixture.SeededData.patients[0];
         var patientTestFilter = new FilterParameters(patientId: patientSearchedFor.Id,null, null, null, null, null);
         
         // Act
@@ -91,6 +91,51 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         {
             Assert.Equal(departmentSearchedFor, a.Department);
         });
+    }
+
+    [Theory]
+    [InlineData("Dec")]
+    [InlineData("hone")]
+    public async Task GetAppointmentsBy_SearchingOnPatient_ReturnAppointmentWithMatchingPatientName(string partialSearch)
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        var partialPatientNameTestFilter = new FilterParameters(null, null, null, patientName: partialSearch, null, null);
+        
+        // Act
+        var appointments = await appointmentRepo.GetAppointmentByAsync(partialPatientNameTestFilter);
+
+        // Assert
+        Assert.Single(appointments);
+        Assert.All(appointments, a => 
+        {
+            Assert.Equal(Fixture.SeededData.patients[1].Id, a.PatientId);
+        });
+    }
+
+    [Fact]
+    public async Task GetAppointmentsBy_SearchingOnClinicianWithMultipleReturns_ReturnTwoAppointments()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        var matchingClinicians = new List<int>
+        {
+            Fixture.SeededData.clinicians[1].Id,
+            Fixture.SeededData.clinicians[2].Id
+        };
+        var clinicianNameTestFilter = new FilterParameters(null, null, null, null , clinicianName: "Murray", null);
+        
+        // Act
+        var appointments = await appointmentRepo.GetAppointmentByAsync(clinicianNameTestFilter);
+
+        // Assert
+        Assert.Equal(2, appointments.Count);
+        foreach (int clinicianId in matchingClinicians)
+        {
+            Assert.Contains(appointments, a => a.ClinicianId == clinicianId);
+        }
     }
 
     [Fact]
