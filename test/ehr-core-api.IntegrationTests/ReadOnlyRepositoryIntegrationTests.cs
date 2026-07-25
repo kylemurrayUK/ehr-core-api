@@ -73,7 +73,7 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         });
     }
 
-        [Fact]
+    [Fact]
     public async Task GetAppointmentsBy_SearchingOnDepartment_ReturnAppointmentsWithMatchingDepartment()
     {
         // Arrange
@@ -93,4 +93,23 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         });
     }
 
+    [Fact]
+    public async Task GetAppointmentsBy_SearchingOnFilter_ReturnAppointmentsWithMatchingStatus()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        AppointmentStatus statusSearchedFor = AppointmentStatus.Completed;
+        var statusTestFilter = new FilterParameters(null, null, null , null, null, status: statusSearchedFor);
+        
+        // Act
+        var appointments = await appointmentRepo.GetAppointmentByAsync(statusTestFilter);
+
+        // Assert
+        Assert.Equal(2, appointments.Count);
+        Assert.All(appointments, a => 
+        {
+            Assert.Equal(statusSearchedFor, a.Status);
+        });
+    }
 }
