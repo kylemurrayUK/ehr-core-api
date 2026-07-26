@@ -107,11 +107,9 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         var appointments = await appointmentRepo.GetAppointmentByAsync(partialPatientNameTestFilter);
 
         // Assert
-        Assert.Single(appointments);
-        Assert.All(appointments, a => 
-        {
-            Assert.Equal(Fixture.SeededData.patients[1].Id, a.PatientId);
-        });
+        var appointment = Assert.Single(appointments);
+        Assert.Equal(Fixture.SeededData.patients[1].Id, appointment.PatientId);
+
     }
 
     [Fact]
@@ -139,7 +137,7 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
     }
 
     [Fact]
-    public async Task GetAppointmentsBy_SearchingOnFilter_ReturnAppointmentsWithMatchingStatus()
+    public async Task GetAppointmentsBy_SearchingOnStatus_ReturnAppointmentsWithMatchingStatus()
     {
         // Arrange
         using var context = Fixture.CreateContext();
@@ -156,5 +154,26 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         {
             Assert.Equal(statusSearchedFor, a.Status);
         });
+    }
+
+
+    // If "Pharmacology" or "AppointmentStatus.Completed" are searched for individually they get two 
+    // appointments each but together only one.
+    [Fact]
+    public async Task GetAppointmentsBy_SearchingOnMultipleFilters_ReturnAppointmentsWithMatchingParameters()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        AppointmentStatus statusSearchedFor = AppointmentStatus.Completed;
+        string departmentSearchedFor = "Pharmacology";
+        var multipleFilter = new FilterParameters(null, null, department: departmentSearchedFor , null, null , status: statusSearchedFor);
+        
+        // Act
+        var appointments = await appointmentRepo.GetAppointmentByAsync(multipleFilter);
+
+        // Assert
+        var appointment = Assert.Single(appointments);
+        Assert.Equal(Fixture.SeededData.patients[0].Id, appointment.PatientId);
     }
 }
