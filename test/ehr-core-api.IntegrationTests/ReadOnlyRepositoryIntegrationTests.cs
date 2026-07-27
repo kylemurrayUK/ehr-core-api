@@ -31,6 +31,23 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         });
         Assert.Equal(Fixture.SeededData.appointments.Count, appointments.Count);
     }
+
+    [Fact]
+    public async Task GetAppointment_SearchingForValidAppointment_ReturnAppointment()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var appointmentRepo = new AppointmentRepository(context);
+        Appointment appointmentSearchedFor = Fixture.SeededData.appointments[1];
+        
+        // Act
+        var appointment = await appointmentRepo.GetAppointmentAsync(appointmentSearchedFor.Id);
+
+        // Assert
+        Assert.NotNull(appointment);
+        Assert.Equal(Fixture.SeededData.appointments[1].Id, appointment.Id);
+    }
+
     [Fact]
     public async Task GetAppointmentWithDetails_SearchingForValidAppointment_ReturnAppointmentWithDetails()
     {
