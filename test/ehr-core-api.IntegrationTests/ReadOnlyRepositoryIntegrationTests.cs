@@ -46,11 +46,10 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         Assert.NotNull(appointment);
         Assert.NotNull(appointment.Clinician);
         Assert.NotNull(appointment.Patient);
-        Assert.Equal(Fixture.SeededData.appointments[0].PatientId, appointment.PatientId);
-        Assert.Equal(Fixture.SeededData.appointments[0].ClinicianId, appointment.ClinicianId);
-
-
+        Assert.Equal(Fixture.SeededData.appointments[0].PatientId, appointment.Patient.Id);
+        Assert.Equal(Fixture.SeededData.appointments[0].ClinicianId, appointment.Clinician.Id);
     }
+
     // GetAppointmentBy Integration Tests
     [Fact]
     public async Task GetAppointmentsBy_SearchingOnPatientId_ReturnAppointmentsWithMatchingPatient()
