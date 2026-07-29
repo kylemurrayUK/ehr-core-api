@@ -11,8 +11,10 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
     public ReadOnlyRepositoryIntegrationTests(TestDatabaseFixture fixture)
     {
         Fixture = fixture;
-
     }
+
+    // Note, these tests depend on 5 appointments being in the seeded data.
+    // They may break if the seed data is changed. If you are getting weird fails, maybe thats why.
     [Fact]
     public async Task GetAllAppointments_ReturnListOfAllAppointments()
     {
