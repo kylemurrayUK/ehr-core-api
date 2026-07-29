@@ -3,11 +3,10 @@ using EHRCoreAPI.Repositories.Implementations;
 
 namespace ehr_core_api.IntegrationTests;
 
-public class WriteRepositoryIntegrationTests
+public class WriteRepositoryIntegrationTests : IDisposable
 {
     public readonly AppointmentRepository _appointmentRepository;
     public readonly TestDatabaseFixture _fixture;
-    
 
     public  (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData {get;}
 
@@ -20,6 +19,11 @@ public class WriteRepositoryIntegrationTests
 
         SeededData = TestSeedData.SeedTestData(context);
         _appointmentRepository = new AppointmentRepository(context);
+    }
+
+    public void Dispose()
+    {
+        
     }
 
 }
