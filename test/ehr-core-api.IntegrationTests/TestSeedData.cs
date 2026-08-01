@@ -1,5 +1,4 @@
 using EHRCoreAPI.Data;
-using Microsoft.EntityFrameworkCore;
 using EHRCoreAPI.Models;
 
 namespace ehr_core_api.IntegrationTests;

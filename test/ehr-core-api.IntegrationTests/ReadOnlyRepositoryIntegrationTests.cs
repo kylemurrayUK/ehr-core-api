@@ -4,6 +4,7 @@ using EHRCoreAPI.Repositories.Implementations;
 
 namespace ehr_core_api.IntegrationTests;
 
+[Collection("Integration tests")]
 public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixture>
 {
     public TestDatabaseFixture Fixture { get; }
