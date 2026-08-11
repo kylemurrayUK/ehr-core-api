@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ehr_core_api.IntegrationTests;
 
-public class ControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public ControllerIntegrationTests(CustomWebApplicationFactory<Program> factory)
+    public ReadOnlyControllerIntegrationTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         factory.SeedDatabase();

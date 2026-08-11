@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using ehr_core_api.IntegrationTests;
 using EHRCoreAPI.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -13,14 +14,26 @@ public class CustomWebApplicationFactory<TProgram>
     {
         builder.ConfigureServices(services =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(
+            var dbContextDescriptor = services.Single(
                 d => d.ServiceType == 
                     typeof(IDbContextOptionsConfiguration<ApiDbContext>));
 
             services.Remove(dbContextDescriptor);
 
-            services.AddDbContext<ApiDbContext> (options => 
-            options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=EHRDb_IntegrationTests;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0"));
+            // Create open SqliteConnection so EF won't automatically close it.
+            services.AddSingleton<DbConnection>(container =>
+            {
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
+
+                return connection;
+            });
+
+            services.AddDbContext<ApiDbContext>((container, options) =>
+            {
+                var connection = container.GetRequiredService<DbConnection>();
+                options.UseSqlite(connection);
+            });
         });
         
 
