@@ -9,7 +9,7 @@ public class TestSeedData
                     List<Clinician> clinicians, 
                     List<Appointment> appointments) SeedTestData(ApiDbContext _db)
     {
-                    var clinicians = new List<Clinician>
+            var clinicians = new List<Clinician>
             {
                 new Clinician { FirstName = "Johhny", LastName = "Doc", Dob = new DateOnly(1950, 5, 11), GmcNumber = "0987654", Specialty = "Surgery" },
                 new Clinician { FirstName = "William", LastName = "Murray", Dob = new DateOnly(1960, 11, 11), GmcNumber = "4567890", Specialty = "Cardiology" },

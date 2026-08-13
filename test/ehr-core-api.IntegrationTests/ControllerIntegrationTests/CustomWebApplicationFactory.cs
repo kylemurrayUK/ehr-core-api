@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+    private bool _seeded = false;
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -37,16 +38,19 @@ public class CustomWebApplicationFactory<TProgram>
         });
         
 
-        builder.UseEnvironment("Development");
+        builder.UseEnvironment("Testing");
     }
 
     public void SeedDatabase()
     {
+        if(!_seeded){
         using (var scope = Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             context.Database.EnsureCreated();
             TestSeedData.SeedTestData(context);
+            _seeded = true;
+        }
         }
     }
 
