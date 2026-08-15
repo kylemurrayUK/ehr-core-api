@@ -2,6 +2,7 @@ using System.Data.Common;
 using System.Runtime.CompilerServices;
 using ehr_core_api.IntegrationTests;
 using EHRCoreAPI.Data;
+using EHRCoreAPI.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,9 @@ public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
     private bool _seeded = false;
+
+    public (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData {get; private set;}
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -48,7 +52,8 @@ public class CustomWebApplicationFactory<TProgram>
         {
             var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             context.Database.EnsureCreated();
-            TestSeedData.SeedTestData(context);
+            SeededData = TestSeedData.SeedTestData(context);
+            
             _seeded = true;
         }
         }
