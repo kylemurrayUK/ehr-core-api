@@ -32,13 +32,13 @@ namespace EHRCoreAPI.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<ReturnAppointmentDTO>> GetAppointment(int id)
+        public async Task<ActionResult<ReturnAppointmentDTO>> GetAppointment(int Id)
         {
-            var appointment = await _appointmentService.GetAppointmentWithDetailsAsync(id);
+            var appointment = await _appointmentService.GetAppointmentWithDetailsAsync(Id);
 
             if (appointment == null)
             {
-                return NotFound($"Appointment with id {id} not found");
+                return NotFound($"Appointment with id {Id} not found");
             }
 
             var AppointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
@@ -84,7 +84,7 @@ namespace EHRCoreAPI.Controllers
             foreach (Appointment appointment in queryResult)
             {
                 queryResponse.Add(appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(),
-                 appointment.Clinician.ToClinicianSummary()));
+                appointment.Clinician.ToClinicianSummary()));
             }
             return Ok(queryResponse);
         }

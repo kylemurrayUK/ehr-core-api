@@ -50,4 +50,21 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Contains(testId.ToString(), responseBody);
     }
 
+    [Fact]
+    public async Task GetAppointment_ValidId_ReturnOkWithAppointmentDTO()
+    {
+        // Arrange
+        var appointmentUnderTest = _factory.SeededData.appointments[1];
+    
+        // Act
+        var response = await _client.GetAsync($"/api/Appointment/GetAppointment/{appointmentUnderTest.Id}");
+        var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<ReturnAppointmentDTO>(); 
+  
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(responseBodyAsAppointment);
+        Assert.Equal(appointmentUnderTest.Id, responseBodyAsAppointment.Id);
+        Assert.Equal(appointmentUnderTest.Clinician.Id, responseBodyAsAppointment.Clinician.Id);
+    }
+
 }
