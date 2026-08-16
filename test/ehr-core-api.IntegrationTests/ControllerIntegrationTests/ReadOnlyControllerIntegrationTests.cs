@@ -79,5 +79,23 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal("No query included", responseBody);
     }
 
-    
+
+    [Fact]
+    public async Task GetAppointmentBy_ThreeParameters_ReturnOkWithAppropriateAppointments()
+    {
+        // Arrange
+        var testAppointment = _factory.SeededData.appointments[1];
+        // Act
+        var response = await _client.GetAsync($"/api/Appointment/GetAppointmentsBy?patientId={testAppointment.PatientId}&department={testAppointment.Department}&status={testAppointment.Status}");
+        var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<List<ReturnAppointmentDTO>>();
+
+        //Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(responseBodyAsAppointment);
+        var appointmentToAssert = Assert.Single(responseBodyAsAppointment);
+        Assert.Equal(testAppointment.PatientId, appointmentToAssert.Patient.Id);
+        Assert.Equal(testAppointment.Department, appointmentToAssert.Department);
+        Assert.Equal(testAppointment.Status, appointmentToAssert.Status);
+    }
+
 }
