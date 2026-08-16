@@ -67,4 +67,17 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal(appointmentUnderTest.Clinician.Id, responseBodyAsAppointment.Clinician.Id);
     }
 
+    [Fact]
+    public async Task GetAppointmentBy_NoParameters_ReturnBadRequestWithErrorMessage()
+    {
+        // Act
+        var response = await _client.GetAsync("/api/Appointment/GetAppointmentsBy/");
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        //Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("No query included", responseBody);
+    }
+
+    
 }
