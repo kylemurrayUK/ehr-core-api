@@ -37,6 +37,7 @@ public class WriteControllerIntegrationTests : IDisposable
         Assert.Contains("Patient Id is required.", responseBody);
         Assert.Contains("Clinician Id name is required.", responseBody);
     }
+
     [Fact]
     public async Task CreateAppointment_PatientIdNotFound_Return400BadRequest()
     {
@@ -44,7 +45,7 @@ public class WriteControllerIntegrationTests : IDisposable
         var testIncorrectPatientIdAppointment = new CreateAppointmentDTO()
         {
             PatientId = 99999,
-            ClinicianId = 1,
+            ClinicianId = _factory.SeededData.clinicians[0].Id,
             Department = "TestDepartment",
             AppointmentTime = new DateTime(2026, 8, 18, 10, 0, 0)
         };
@@ -56,6 +57,38 @@ public class WriteControllerIntegrationTests : IDisposable
         //Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Contains("Patient with this ID does not exist.", responseBody);
+    }
+
+    [Fact]
+    public async Task CreateAppointment_ValidAppointment_Return201WithAppointmentAndLocation()
+    {
+        //Arrange
+        var testCorrectAppointment = new CreateAppointmentDTO()
+        {
+            PatientId = _factory.SeededData.patients[0].Id,
+            ClinicianId = _factory.SeededData.clinicians[0].Id,
+            Department = "TestDepartment",
+            AppointmentTime = new DateTime(2026, 8, 18, 10, 0, 0)
+        };
+        
+        //Act
+        var response = await _client.PostAsJsonAsync("api/Appointment/CreateAppointment", testCorrectAppointment);
+        var responseLocation = response.Headers.Location;
+        var responseBody = await response.Content.ReadFromJsonAsync<ReturnAppointmentDTO>();
+
+        //Assert
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        Assert.NotNull(responseBody);
+        Assert.NotEqual(0, responseBody.Id);
+        Assert.Equal(_factory.SeededData.patients[0].Id, responseBody.Patient.Id);
+        Assert.Equal(_factory.SeededData.clinicians[0].Id, responseBody.Clinician.Id);
+
+        Assert.NotNull(responseLocation);
+        var responseLocationResponse = await _client.GetAsync(responseLocation);
+        var appointmentAtResponseLocation = await responseLocationResponse.Content.ReadFromJsonAsync<ReturnAppointmentDTO>();
+        Assert.NotNull(appointmentAtResponseLocation);
+        Assert.Equal(responseBody.Id, appointmentAtResponseLocation.Id);
     }
 
     public void Dispose()
