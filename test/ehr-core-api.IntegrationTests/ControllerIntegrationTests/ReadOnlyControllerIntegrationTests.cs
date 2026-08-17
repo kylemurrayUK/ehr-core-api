@@ -26,7 +26,7 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(responseBodyAsAppointment);
         Assert.Equal(_factory.SeededData.appointments.Count, responseBodyAsAppointment.Count);
-        var appointmentToVerify = Assert.Single(responseBodyAsAppointment, a => a.Id == _factory.SeededData.appointments[0].Clinician.Id);
+        var appointmentToVerify = Assert.Single(responseBodyAsAppointment, a => a.Id == _factory.SeededData.appointments[1].Id);
         Assert.Equal(_factory.SeededData.appointments[1].Clinician.Id, appointmentToVerify.Clinician.Id);
     }
 
@@ -92,5 +92,4 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal(testAppointment.Department, appointmentToAssert.Department);
         Assert.Equal(testAppointment.Status, appointmentToAssert.Status);
     }
-
 }

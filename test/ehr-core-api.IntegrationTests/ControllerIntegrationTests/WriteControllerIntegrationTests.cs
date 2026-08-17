@@ -91,6 +91,44 @@ public class WriteControllerIntegrationTests : IDisposable
         Assert.Equal(responseBody.Id, appointmentAtResponseLocation.Id);
     }
 
+    [Fact]
+    public async Task ChangeAppointmentStatus_AppointmentIdDoesNotExist_Return404WithErrorMessage()
+    {
+        //Arrange
+        var incorrectAppointment = new ChangeAppointmentStatusDTO
+        {
+            Id = 999999,
+            Status = AppointmentStatus.EnteredInError
+        };
+
+        //Act
+        var response = await _client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", incorrectAppointment);
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        //Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal("Appointment not found", responseBody);
+    }
+
+    [Fact]
+    public async Task ChangeAppointmentStatus_SuccessfulAppointmentStatusChange_Return200WithConfirmationMessage()
+    {
+        //Arrange
+        var correctAppointment = new ChangeAppointmentStatusDTO
+        {
+            Id = _factory.SeededData.appointments[0].Id,
+            Status = _factory.SeededData.appointments[0].Status == AppointmentStatus.EnteredInError ? AppointmentStatus.Cancelled : AppointmentStatus.EnteredInError
+        };
+
+        //Act
+        var response = await _client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", correctAppointment);
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        //Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("Appointment status successfully changed", responseBody);
+    }
+
     public void Dispose()
     {
         if(_factory.Connection != null)
