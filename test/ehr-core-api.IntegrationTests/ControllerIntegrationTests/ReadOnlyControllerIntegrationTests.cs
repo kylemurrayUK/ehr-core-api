@@ -1,9 +1,4 @@
 using EHRCoreAPI.Dtos.Output;
-using EHRCoreAPI.Mappers;
-using EHRCoreAPI.Models;
-using EHRCoreAPI.Repositories.Implementations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 
 

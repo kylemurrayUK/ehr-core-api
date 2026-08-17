@@ -4,6 +4,7 @@ using ehr_core_api.IntegrationTests;
 using EHRCoreAPI.Data;
 using EHRCoreAPI.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -12,7 +13,7 @@ public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
     private bool _seeded = false;
-
+    public DbConnection? Connection{get; set;}
     public (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData {get; private set;}
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -31,6 +32,7 @@ public class CustomWebApplicationFactory<TProgram>
                 var connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();
 
+                Connection = connection;
                 return connection;
             });
 
