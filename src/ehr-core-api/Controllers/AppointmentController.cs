@@ -112,7 +112,7 @@ namespace EHRCoreAPI.Controllers
         public async Task<IActionResult> ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
             var changeOutcome = await _appointmentService.ChangeAppointmentStatus(changeAppointmentStatusDTO);
-            if (changeOutcome.wasSuccessful == false)
+            if (!changeOutcome.wasSuccessful)
             {
                 return NotFound(changeOutcome.message);
             }

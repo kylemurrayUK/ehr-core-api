@@ -21,7 +21,7 @@ namespace EHRCoreAPI.Dtos
         /// <summary>
         /// Clinician patient will be seeing
         /// </summary>
-        [Required(ErrorMessage = "Clinician Id name is required.")]
+        [Required(ErrorMessage = "Clinician Id is required.")]
         public int? ClinicianId {get; set;}
         [Required(ErrorMessage = "Date and time of appointment is required. ")]
         public DateTime AppointmentTime{get; set;}

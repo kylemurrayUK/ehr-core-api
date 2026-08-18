@@ -4,10 +4,10 @@ namespace ehr_core_api.SmokeTests;
 
 public class SmokeTestFixture
 {
-    public RestClient _restClient;
+    public RestClient Client;
 
     public SmokeTestFixture()
     {
-        _restClient = new RestClient("https://localhost:7192");
+        Client = new RestClient("https://localhost:7192");
     }
 }

@@ -35,7 +35,7 @@ public class WriteControllerIntegrationTests : IDisposable
         //Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Contains("Patient Id is required.", responseBody);
-        Assert.Contains("Clinician Id name is required.", responseBody);
+        Assert.Contains("Clinician Id is required.", responseBody);
     }
 
     [Fact]
