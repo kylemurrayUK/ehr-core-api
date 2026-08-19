@@ -38,6 +38,26 @@ All the above are implemented using HTTP requests. Please see How to Run for spe
  - In my post request I return a 201 Created response when successful using the CreatedAtAction method that returns the location of the new resource along with its value in the response body. This returns a 400 Bad Request if the model state is invalid
  - For the patch request, I return a 404 not found if the appointment id isn't found and I return a 200 response if appointment status is successfully edited. This is so I can catch the case where the user has tried to change the status to the same status. The body of the 200 response will contain this message. 
 
+## Testing
+Testing was the key concept for this stage of the project, with four layers implemented that move from complete isolation through to a live running instance. Each layer trades speed for realism.
+
+### Unit Tests
+Unit testing of the service layer implemented with xUnit and Moq. All three repository interfaces are mocked so no database is involved, meaning these tests only prove the business logic itself is correct. The pass through methods that contain no logic were left out as they aren't appropriate for unit testing and are covered by the integration tests instead.
+
+### Repository Integration Tests
+Integration testing of the repository layer against a real SQL Server database, which is dropped, recreated and reseeded on each run. Mocking can't tell you whether the EF Core queries and mappings actually work, so a real database engine was used here.
+
+### Controller Integration Tests
+Integration testing of the controller layer using WebApplicationFactory, with the SQL Server dependency swapped out for an in-memory SQLite connection and requests sent through a real HttpClient. These run the controller, service and repository together, so they pick up wiring issues such as dependency injection, routing, model binding and status codes without needing a database instance running.
+
+### Smoke Tests
+Smoke testing with RestSharp against a genuinely running instance of the API over real HTTP. These are limited to a handful of critical path checks and are tagged with a Category trait so they can be run on their own. This is the only layer that proves the application actually boots and responds.
+
+### Testing Design Decisions
+ - The repository tests run against real SQL Server whilst the controller tests use in-memory SQLite. This is deliberate as the repository layer is where provider specific behaviour actually matters, whereas the controller tests are checking wiring rather than queries so the speed and zero setup of SQLite was deemed the better trade off there.
+
+Run all tests with dotnet test, or target a single layer by passing the test project path. Note that the repository integration tests require a local SQLEXPRESS instance, and the smoke tests require the API to already be running.
+
 ## How to Run
 Currently not deployed as a standalone application - so once you have pulled the repo run dotnet build then dotnet run. You will also need an SQL database and you will need to either add a connection string in the appsettings.json file or create an appsettings.Development.json file and add it in there. For example:
 ```
