@@ -56,4 +56,21 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
         Assert.NotNull(response.Data);
         Assert.NotEqual(0, response.Data.Id);
     }
+
+    [Trait("Category", "Smoke")]
+    [Fact]
+    public async Task GetAppointment_APIRunningButIncorrectAppointment_Return404WithMessage()
+    {
+        //Arrange
+        int incorrectAppointmentId = 9999999;
+        var request = new RestRequest($"/api/Appointment/GetAppointment/{incorrectAppointmentId}");
+
+        //Act
+        var response = await _fixture.Client.ExecuteAsync(request);
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.NotNull(response.Content);
+        Assert.Contains(incorrectAppointmentId.ToString(), response.Content);
+    }
 }
