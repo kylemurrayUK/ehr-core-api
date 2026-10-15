@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
 using EHRCoreAPI.Models;
 
@@ -14,6 +13,7 @@ namespace EHRCoreAPI.Data
         public DbSet<Appointment> Appointments { get; set;}
         public DbSet<Patient> Patients {get; set;}
         public DbSet<Clinician> Clinicians {get; set;}
+        public DbSet<User> Users{get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,13 +50,13 @@ namespace EHRCoreAPI.Data
             modelBuilder.Entity<Patient>().HasIndex(p => p.NhsNumber)
                                           .IsUnique(); 
 
-            modelBuilder.Entity<Clinician>().Property(p => p.FirstName)
+            modelBuilder.Entity<Clinician>().Property(c => c.FirstName)
                                           .IsRequired()
                                           .HasMaxLength(100);
-            modelBuilder.Entity<Clinician>().Property(p => p.LastName)
+            modelBuilder.Entity<Clinician>().Property(c => c.LastName)
                                           .IsRequired()
                                           .HasMaxLength(100);
-            modelBuilder.Entity<Clinician>().Property(p => p.Dob)
+            modelBuilder.Entity<Clinician>().Property(c => c.Dob)
                                           .IsRequired();
             modelBuilder.Entity<Clinician>().Property(c => c.Specialty)
                                             .IsRequired()
@@ -65,7 +65,22 @@ namespace EHRCoreAPI.Data
                                           .IsRequired()
                                           .HasMaxLength(7);            
             modelBuilder.Entity<Clinician>().HasIndex(c => c.GmcNumber)
-                                          .IsUnique();                          
+                                          .IsUnique();                
+
+            
+            modelBuilder.Entity<User>().Property(u => u.Email)
+                                          .IsRequired()
+                                          .HasMaxLength(100);
+            modelBuilder.Entity<User>().HasIndex(u => u.Email)
+                                          .IsUnique();
+            modelBuilder.Entity<User>().Property(u => u.HashedPassword)
+                                          .IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.HashSalt)
+                                          .IsRequired();                                  
+            modelBuilder.Entity<User>().HasOne(u => u.Clinician)
+                                              .WithOne()
+                                              .HasForeignKey<User>(u => u.ClinicianId)
+                                              .OnDelete(DeleteBehavior.Restrict);       
         }
     }
 }
