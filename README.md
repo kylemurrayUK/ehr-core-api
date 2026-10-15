@@ -56,6 +56,7 @@ Smoke testing with RestSharp against a genuinely running instance of the API ove
 ### Testing Design Decisions
  - The repository tests run against real SQL Server whilst the controller tests use in-memory SQLite. This is deliberate as the repository layer is where provider specific behaviour actually matters, whereas the controller tests are checking wiring rather than queries so the speed and zero setup of SQLite was deemed the better trade off there.
 
+### How to Run Tests
 Run all tests with dotnet test, or target a single layer by passing the test project path. Note that the repository integration tests require a local SQLEXPRESS instance, and the smoke tests require the API to already be running.
 
 ## How to Run
