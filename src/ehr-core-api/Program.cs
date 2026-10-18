@@ -1,5 +1,6 @@
 
 using System.Data.Common;
+using EHRCoreAPI.Services.Implementations;
 using EHRCoreAPI.Repositories.Implementations;
 using EHRCoreAPI.Repositories;
 using EHRCoreAPI.Data;
@@ -17,6 +18,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IClinicianRepository, ClinicianRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddSingleton<PasswordHashingService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
