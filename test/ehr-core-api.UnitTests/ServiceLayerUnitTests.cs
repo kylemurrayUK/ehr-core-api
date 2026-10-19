@@ -1,8 +1,7 @@
 ﻿using EHRCoreAPI.Repositories;
-using EHRCoreAPI;
+using EHRCoreAPI.Services.Implementations;
 using EHRCoreAPI.Models;
 using EHRCoreAPI.Dtos;
-using System.Data.Common;
 
 
 
