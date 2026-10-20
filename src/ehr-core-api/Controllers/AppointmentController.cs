@@ -3,6 +3,7 @@ using EHRCoreAPI.Dtos;
 using EHRCoreAPI.Dtos.Output;
 using EHRCoreAPI.Mappers;
 using EHRCoreAPI.Models;
+using EHRCoreAPI.Services.Implementations;
 
 namespace EHRCoreAPI.Controllers
 {

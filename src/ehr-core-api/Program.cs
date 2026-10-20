@@ -1,6 +1,5 @@
-
-using System.Data.Common;
 using EHRCoreAPI.Services.Implementations;
+using EHRCoreAPI.Services;
 using EHRCoreAPI.Repositories.Implementations;
 using EHRCoreAPI.Repositories;
 using EHRCoreAPI.Data;
@@ -18,7 +17,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IClinicianRepository, ClinicianRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddSingleton<PasswordHashingService>();
+builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -35,7 +34,8 @@ if (app.Environment.IsDevelopment())
     using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        DbSeeder.SeedData(context);
+        var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHashingService>();
+        DbSeeder.SeedData(context, passwordHasher);
     }
 }
 
