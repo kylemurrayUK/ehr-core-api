@@ -4,6 +4,7 @@ using EHRCoreAPI.Repositories.Implementations;
 using EHRCoreAPI.Repositories;
 using EHRCoreAPI.Data;
 using EHRCoreAPI;
+using EHRCoreAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IClinicianRepository, ClinicianRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddControllers();
 
 var app = builder.Build();
