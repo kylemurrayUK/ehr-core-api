@@ -6,7 +6,7 @@ namespace EHRCoreAPI.Repositories.Implementations
 {
     public class PatientRepository : IPatientRepository
     {
-        public ApiDbContext _db;
+        private readonly ApiDbContext _db;
         public PatientRepository(ApiDbContext db)
         {
             _db = db;
