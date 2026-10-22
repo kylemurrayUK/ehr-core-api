@@ -4,5 +4,5 @@ namespace EHRCoreAPI.Services;
 
 public interface ITokenService
 {
-    public (string, DateTime) GenerateToken(User user);
+    public (string token, DateTime expiryTime) GenerateToken(User user);
 }
