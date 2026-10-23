@@ -16,7 +16,7 @@ public class TokenService : ITokenService
     {
         _jwtSettings = jwtSettings.Value;
     }
-    public (string, DateTime) GenerateToken(User user)
+    public (string token, DateTime expiryTime) GenerateToken(User user)
     {
         var signingKey = new SymmetricSecurityKey(Convert.FromBase64String(_jwtSettings.Key));
 
