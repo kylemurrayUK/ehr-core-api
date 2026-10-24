@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace EHRCoreAPI.Services;
+namespace EHRCoreAPI.Services.Implementations;
 
 public class TokenService : ITokenService
 {
