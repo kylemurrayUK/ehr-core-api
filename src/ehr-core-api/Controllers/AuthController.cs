@@ -18,13 +18,13 @@ namespace EHRCoreAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LoginResponseDTO>> LoginAsync(LoginRequestDTO loginRequest)
+        public async Task<ActionResult<LoginResponseDTO>> Login(LoginRequestDTO loginRequest)
         {
-            var loginRequestResult = await _authService.Login(loginRequest);
+            var loginRequestResult = await _authService.LoginAsync(loginRequest);
 
             if(loginRequestResult.LoginOutcome == LoginOutcome.InvalidCredentials)
             {
-                return Unauthorized();
+                return Unauthorized("Invalid Email or Password");
             }
             else if(loginRequestResult.LoginOutcome == LoginOutcome.AccountInactive)
             {

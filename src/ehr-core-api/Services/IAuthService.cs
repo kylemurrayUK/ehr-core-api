@@ -5,5 +5,5 @@ namespace EHRCoreAPI.Services;
 
 public interface IAuthService
 {
-    Task<AuthResult> Login(LoginRequestDTO loginRequest);
+    Task<AuthResult> LoginAsync(LoginRequestDTO loginRequest);
 }

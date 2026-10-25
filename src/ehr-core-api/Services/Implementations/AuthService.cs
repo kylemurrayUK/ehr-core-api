@@ -15,7 +15,7 @@ public class AuthService : IAuthService
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
     }
-    public async Task<AuthResult> Login(LoginRequestDTO loginRequest)
+    public async Task<AuthResult> LoginAsync(LoginRequestDTO loginRequest)
     {
         string emailToValidate = loginRequest.Email.ToLowerInvariant();
         AuthResult result = new AuthResult();
