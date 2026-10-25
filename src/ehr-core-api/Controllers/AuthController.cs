@@ -30,7 +30,7 @@ namespace EHRCoreAPI.Controllers
             {
                 return StatusCode(403, "Account is not active");
             }
-            else
+            else if (loginRequestResult.LoginOutcome == LoginOutcome.Success)
             {
                 var loginResponse = new LoginResponseDTO
                 {
@@ -39,6 +39,8 @@ namespace EHRCoreAPI.Controllers
                 };
                 return Ok(loginResponse);
             }
+
+            return StatusCode(500, "Unexpected login outcome");
 
         }
     }
