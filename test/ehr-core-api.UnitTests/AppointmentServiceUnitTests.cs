@@ -7,7 +7,7 @@ using EHRCoreAPI.Dtos;
 
 namespace ehr_core_api.Tests;
 
-public class ServiceLayerUnitTests
+public class AppointmentServiceUnitTests
 {
     private readonly Mock<IAppointmentRepository> _mockAppointmentRepo;
     private readonly Mock<IClinicianRepository> _mockClinicianRepo;
@@ -15,7 +15,7 @@ public class ServiceLayerUnitTests
 
     private readonly AppointmentService _appointmentService;
 
-    public ServiceLayerUnitTests()
+    public AppointmentServiceUnitTests()
     {
         _mockAppointmentRepo = new Mock<IAppointmentRepository>();
         _mockClinicianRepo = new Mock<IClinicianRepository>();
