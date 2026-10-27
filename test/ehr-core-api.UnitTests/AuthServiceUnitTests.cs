@@ -52,4 +52,44 @@ public class AuthServiceUnitTests
             , Times.Never);
         _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Never);
     }
+
+    [Fact]
+    public async Task LoginAsync_IncorrectPassword_ReturnLoginCredentialsInvalid()
+    {
+        // Arrange
+        string email = "validemail@email.com";
+        string incorrectPassword = "IncorrectPassword";
+
+
+        var loginRequest = new LoginRequestDTO
+        {
+            Email = email, 
+            Password = incorrectPassword
+        };
+        var testUser = new User
+        {
+            Email = email,
+            HashedPassword = [],
+            HashSalt = [],
+            Role = UserRole.Admin,
+        };
+
+        _mockUserRepo.Setup(mock => mock.GetUserByEmailAsync(email))
+        .ReturnsAsync(testUser);
+        _mockPasswordHasher.Setup(mock => mock.VerifyPasswordHash(It.IsAny<string>()
+            ,It.IsAny<byte[]>()
+            ,It.IsAny<byte[]>()
+        )).Returns(false);
+
+        // Act
+        var result = await _authService.LoginAsync(loginRequest);
+
+        // Assert
+        Assert.Equal(LoginOutcome.InvalidCredentials, result.LoginOutcome);
+
+        _mockPasswordHasher.Verify(mock => mock.VerifyPasswordHash(
+            It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<byte[]>())
+            , Times.Once);
+        _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Never);
+    }
 }
