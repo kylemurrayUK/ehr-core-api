@@ -176,4 +176,24 @@ public class AuthServiceUnitTests
             , Times.Once);
         _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Once);
     }
+
+    [Fact]
+    public async Task LoginAsync_MixedCaseEmail_LowercaseLookedUp()
+    {
+        // Arrange
+        string mixedCaseEmail = "Test@Email.Com";
+        string lowerCaseEmail = "test@email.com";
+
+        var loginRequest = new LoginRequestDTO
+        {
+            Email = mixedCaseEmail,
+            Password = "randomPass"
+        };
+
+        // Act
+        var result = await _authService.LoginAsync(loginRequest);
+
+        // Assert
+        _mockUserRepo.Verify(mock => mock.GetUserByEmailAsync(lowerCaseEmail), Times.Once);
+    }
 }
