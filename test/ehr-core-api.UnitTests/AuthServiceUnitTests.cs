@@ -132,4 +132,48 @@ public class AuthServiceUnitTests
             , Times.Once);
         _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Never);
     }
+
+    [Fact]
+    public async Task LoginAsync_CorrectLoginDetails_ReturnToken()
+    {
+        // Arrange
+        string email = "validemail@email.com";
+        string password = "CorrectPassword";
+
+        var loginRequest = new LoginRequestDTO
+        {
+            Email = email, 
+            Password = password
+        };
+        var testUser = new User
+        {
+            Email = email,
+            HashedPassword = [],
+            HashSalt = [],
+            Role = UserRole.Admin,
+        };
+        string testToken = "test-token-123";
+        DateTime testExpiresAt = new DateTime(2030, 1, 1, 0, 0, 0, DateTimeKind.Utc); 
+
+        _mockUserRepo.Setup(mock => mock.GetUserByEmailAsync(email))
+        .ReturnsAsync(testUser);
+        _mockPasswordHasher.Setup(mock => mock.VerifyPasswordHash(It.IsAny<string>()
+            ,It.IsAny<byte[]>()
+            ,It.IsAny<byte[]>()
+        )).Returns(true);
+        _mockTokenService.Setup(mock => mock.GenerateToken(testUser)).Returns((testToken, testExpiresAt));
+
+        // Act
+        var result = await _authService.LoginAsync(loginRequest);
+
+        // Assert
+        Assert.Equal(LoginOutcome.Success, result.LoginOutcome);
+        Assert.Equal(testToken, result.Token);
+        Assert.Equal(testExpiresAt, result.ExpiresAt);
+
+        _mockPasswordHasher.Verify(mock => mock.VerifyPasswordHash(
+            It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<byte[]>())
+            , Times.Once);
+        _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Once);
+    }
 }
