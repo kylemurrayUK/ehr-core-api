@@ -72,7 +72,7 @@ public class TokenServiceUnitTests
         Assert.DoesNotContain(readableToken.Claims, c => c.Type == CustomClaimTypes.ClinicianId);
     }
 
-        [Fact]
+    [Fact]
     public void GenerateToken_UserIsAdmin_ReturnsCorrectIdentityAndRole()
     {
         // Arrange
@@ -96,5 +96,36 @@ public class TokenServiceUnitTests
         
         Assert.Equal("47", subClaim.Value);
         Assert.Equal("Admin", roleClaim.Value);
+    }
+
+    [Fact]
+    public void GenerateToken_StandardRequest_ReturnsCorrectExpiryTime()
+    {
+        // Arrange
+        var testUser = new User
+        {
+            Id = 47,
+            Email = "testadmin@email.com",
+            HashedPassword = [],
+            HashSalt = [],
+            Role = UserRole.Admin
+        };
+
+        DateTime timeBeforeRequest = DateTime.UtcNow;
+        // Act
+        var result = _tokenService.GenerateToken(testUser);
+
+        DateTime timeAfterRequest = DateTime.UtcNow;
+
+
+        // Assert
+        var readableToken = new JwtSecurityTokenHandler().ReadJwtToken(result.token);
+        var expiry = readableToken.ValidTo;
+        
+        // checking expiry date falls within 15 mins (Expiry time in settings). Minus a few seconds on before to account for rounding 
+        Assert.InRange(expiry, 
+                       timeBeforeRequest.AddMinutes(_testTokenSettings.ExpiryMinutes).AddSeconds(-5), 
+                       timeAfterRequest.AddMinutes(_testTokenSettings.ExpiryMinutes));
+
     }
 }
