@@ -6,6 +6,8 @@ using EHRCoreAPI.Data;
 using EHRCoreAPI;
 using EHRCoreAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,26 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
+
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
+                    ?? throw new InvalidOperationException("JWT settings are missing");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                                    .AddJwtBearer(options => {options.TokenValidationParameters = new TokenValidationParameters
+                                    {
+                                        ValidateIssuer = true,
+                                        ValidIssuer = jwtSettings.Issuer,
+
+                                        ValidateAudience = true,
+                                        ValidAudience = jwtSettings.Audience,
+
+                                        ValidateIssuerSigningKey = true,
+                                        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(jwtSettings.Key)),
+
+                                        ValidateLifetime = true,
+                                        ClockSkew = TimeSpan.FromSeconds(2)
+                                    };});
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -45,6 +67,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

@@ -4,10 +4,11 @@ using EHRCoreAPI.Dtos.Output;
 using EHRCoreAPI.Mappers;
 using EHRCoreAPI.Models;
 using EHRCoreAPI.Services.Implementations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EHRCoreAPI.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AppointmentController : ControllerBase
