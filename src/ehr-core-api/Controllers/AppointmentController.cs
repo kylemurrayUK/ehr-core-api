@@ -15,9 +15,11 @@ namespace EHRCoreAPI.Controllers
     public class AppointmentController : ControllerBase
     {
         private AppointmentService _appointmentService;
-        public AppointmentController(AppointmentService appointmentService)
+        private IAuthorizationService _authorizationService;
+        public AppointmentController(AppointmentService appointmentService, IAuthorizationService authorizationService)
         {
             _appointmentService = appointmentService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -115,6 +117,15 @@ namespace EHRCoreAPI.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
+            
+            var authResult = await _authorizationService.AuthorizeAsync(
+            User, changeAppointmentStatusDTO.Status, PolicyNames.ChangeAppointmentStatus);
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             var changeOutcome = await _appointmentService.ChangeAppointmentStatus(changeAppointmentStatusDTO);
             if (!changeOutcome.wasSuccessful)
             {
