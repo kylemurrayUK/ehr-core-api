@@ -5,6 +5,7 @@ using EHRCoreAPI.Mappers;
 using EHRCoreAPI.Models;
 using EHRCoreAPI.Services.Implementations;
 using Microsoft.AspNetCore.Authorization;
+using EHRCoreAPI.Auth;
 
 namespace EHRCoreAPI.Controllers
 {
@@ -110,7 +111,7 @@ namespace EHRCoreAPI.Controllers
             return CreatedAtAction(nameof(GetAppointment), new {id = submittedAppointment.Id}, submittedAppointment);
         }
 
-        [Authorize(Roles = nameof(UserRole.Clinician))]
+        [Authorize(Policy = PolicyNames.AdminAndClinician)]
         [HttpPatch]
         public async Task<IActionResult> ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {

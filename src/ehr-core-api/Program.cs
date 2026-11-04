@@ -8,6 +8,9 @@ using EHRCoreAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using EHRCoreAPI.Auth;
+using EHRCoreAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +48,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                         ClockSkew = TimeSpan.FromSeconds(2)
                                     };});
 
-builder.Services.AddAuthorization();
+var requireRolePolicy = new AuthorizationPolicyBuilder()
+    .RequireRole(nameof(UserRole.Admin), nameof(UserRole.Clinician))
+    .Build();
+builder.Services.AddAuthorizationBuilder().AddPolicy(PolicyNames.AdminAndClinician, requireRolePolicy);
 
 var app = builder.Build();
 

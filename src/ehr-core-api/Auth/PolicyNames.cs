@@ -2,7 +2,7 @@ namespace EHRCoreAPI.Auth;
 
 public static class PolicyNames
 {
-    const string AdminOnly = "AdminOnly";
-    const string ClinicianONly = "ClinicianOnly";
-    const string AdminAndClinican = "AdminAndClinican";
+    public const string AdminOnly = "AdminOnly";
+    public const string ClinicianOnly = "ClinicianOnly";
+    public const string AdminAndClinician = "AdminAndClinican";
 }
