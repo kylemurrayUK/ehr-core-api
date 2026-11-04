@@ -110,6 +110,7 @@ namespace EHRCoreAPI.Controllers
             return CreatedAtAction(nameof(GetAppointment), new {id = submittedAppointment.Id}, submittedAppointment);
         }
 
+        [Authorize(Roles = nameof(UserRole.Clinician))]
         [HttpPatch]
         public async Task<IActionResult> ChangeAppointmentStatus([FromBody] ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
