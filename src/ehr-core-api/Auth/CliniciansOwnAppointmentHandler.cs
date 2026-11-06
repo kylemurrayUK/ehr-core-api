@@ -27,6 +27,5 @@ public class CliniciansOwnAppointmentHandler : AuthorizationHandler<CliniciansOw
         }
 
         return Task.CompletedTask;
-        
     }
 }

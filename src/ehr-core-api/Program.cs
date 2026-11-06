@@ -30,6 +30,7 @@ builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAuthorizationHandler, StatusChangeHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CliniciansOwnAppointmentHandler>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
                     ?? throw new InvalidOperationException("JWT settings are missing");
@@ -55,7 +56,11 @@ var requireRolePolicy = new AuthorizationPolicyBuilder()
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(PolicyNames.AdminAndClinician, requireRolePolicy)
     .AddPolicy(PolicyNames.ChangeAppointmentStatus, policy =>
-        policy.Requirements.Add(new StatusChangeRequirement()));
+        policy.Requirements.Add(new StatusChangeRequirement()))
+    .AddPolicy(PolicyNames.CliniciansOwnAppointments, policy =>
+        policy.Requirements.Add(new CliniciansOwnAppointmentRequirement()));
+
+
 
 var app = builder.Build();
 
