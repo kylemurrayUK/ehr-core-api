@@ -20,7 +20,7 @@ namespace EHRCoreAPI.Services.Implementations
             _clinicianRepository = clinicianRepository;
         }
 
-        public async Task<List<Appointment>> ListAppointmentsAsync()
+        public async Task<List<Appointment>> ListAppointmentsAsync(int? clinicianId = null)
         {
             return await _appointmentRepository.GetAllAppointmentsAsync();
         }
@@ -30,7 +30,7 @@ namespace EHRCoreAPI.Services.Implementations
             return await _appointmentRepository.GetAppointmentWithDetailsAsync(id);
         }
 
-        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters)
+        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters, int? clinicianId = null)
         {
             return await _appointmentRepository.GetAppointmentByAsync(filters);
         }

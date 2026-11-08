@@ -12,8 +12,15 @@ namespace EHRCoreAPI.Repositories.Implementations
         {
             _db = db;
         }
-        public async Task<List<Appointment>> GetAllAppointmentsAsync()
+        public async Task<List<Appointment>> GetAllAppointmentsAsync(int? clinicianId = null)
         {
+            if (clinicianId != null)
+            {
+                return await _db.Appointments.Include(a => a.Clinician)
+                                             .Include(a => a.Patient)
+                                             .Where(a => a.ClinicianId == clinicianId)
+                                             .ToListAsync();            
+            }
             return await _db.Appointments.Include(a => a.Clinician).Include(a => a.Patient).ToListAsync();        
         }
         public async Task<Appointment?> GetAppointmentAsync(int id)
@@ -34,9 +41,13 @@ namespace EHRCoreAPI.Repositories.Implementations
             appointment.Status = newAppointmentStatus;
             await _db.SaveChangesAsync();
         }
-        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters)
+        public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters, int? clinicianId = null)
     {
-        IQueryable<Appointment> query =  _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician);   
+        IQueryable<Appointment> query =  _db.Appointments.Include(a => a.Patient).Include(a => a.Clinician);
+        if (clinicianId != null)
+        {
+            query = query.Where(a => a.ClinicianId == clinicianId); 
+        }   
         if (filters.PatientId != null)
         {
             query = query.Where(a => a.PatientId == filters.PatientId.Value);
