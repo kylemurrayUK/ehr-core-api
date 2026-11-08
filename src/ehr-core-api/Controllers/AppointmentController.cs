@@ -36,19 +36,29 @@ namespace EHRCoreAPI.Controllers
             return Ok(allAppointmentsAsDTOs);
         }
 
+        
         [HttpGet("{Id}")]
         public async Task<ActionResult<ReturnAppointmentDTO>> GetAppointment(int Id)
         {
             var appointment = await _appointmentService.GetAppointmentWithDetailsAsync(Id);
 
+
             if (appointment == null)
             {
-                return NotFound($"Appointment with id {Id} not found");
+                return NotFound($"Appointment not found or you don't have access to it");
+            }
+            
+            var authResult = await _authorizationService.AuthorizeAsync(
+            User, appointment, PolicyNames.CliniciansOwnAppointments);
+
+            if (!authResult.Succeeded)
+            {
+                return NotFound($"Appointment not found or you don't have access to it");
             }
 
-            var AppointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
+            var appointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
 
-            return Ok(AppointmentResponse);
+            return Ok(appointmentResponse);
         }
 
         [HttpGet]
