@@ -23,12 +23,31 @@ namespace EHRCoreAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Appointment>>> ListAppointments()
+        public async Task<ActionResult<List<ReturnAppointmentDTO>>> ListAppointments()
         {
-            List<Appointment> allAppointments = await _appointmentService.ListAppointmentsAsync();
+            int? restrictToClinicianId;
+            
+            if (User.IsInRole(UserRole.Admin.ToString()))
+            {
+                restrictToClinicianId = null;
+            }
+            else if(User.IsInRole(UserRole.Clinician.ToString()))
+            {
+                restrictToClinicianId = User.GetClinicianId();
+                if(restrictToClinicianId == null)
+                    {
+                        return Forbid();
+                    }          
+            }
+            else
+            {
+                return Forbid(); 
+            }
+
+            List<Appointment> appointments = await _appointmentService.ListAppointmentsAsync(restrictToClinicianId);
             List<ReturnAppointmentDTO> allAppointmentsAsDTOs = new List<ReturnAppointmentDTO>();
 
-            foreach (Appointment appointment in allAppointments)
+            foreach (Appointment appointment in appointments)
             {
                 allAppointmentsAsDTOs.Add(appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(), appointment.Clinician.ToClinicianSummary()));
             }
@@ -74,6 +93,26 @@ namespace EHRCoreAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            int? restrictToClinicianId;
+            
+            if (User.IsInRole(UserRole.Admin.ToString()))
+            {
+                restrictToClinicianId = null;
+            }
+            else if(User.IsInRole(UserRole.Clinician.ToString()))
+            {
+                restrictToClinicianId = User.GetClinicianId();
+                if(restrictToClinicianId == null)
+                    {
+                        return Forbid();
+                    }          
+            }
+            else
+            {
+                return Forbid(); 
+            }
+
             int parameterCounter = 0;
             object?[] queryParameters = [patientId, clinicianId, department,
                                          patientName, clinicianName, status];
@@ -93,7 +132,7 @@ namespace EHRCoreAPI.Controllers
             FilterParameters filters = new FilterParameters(patientId, clinicianId, department,
                                          patientName, clinicianName, status);
             
-            List<Appointment> queryResult = await _appointmentService.GetAppointmentByAsync(filters);
+            List<Appointment> queryResult = await _appointmentService.GetAppointmentByAsync(filters, restrictToClinicianId);
             
             List<ReturnAppointmentDTO> queryResponse = new List<ReturnAppointmentDTO>();
             foreach (Appointment appointment in queryResult)

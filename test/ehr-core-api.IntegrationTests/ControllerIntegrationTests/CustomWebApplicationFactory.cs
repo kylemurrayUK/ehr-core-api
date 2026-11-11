@@ -36,13 +36,19 @@ public class CustomWebApplicationFactory<TProgram>
                 return connection;
             });
 
+            
+
             services.AddDbContext<ApiDbContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
         });
-        
+
+        builder.UseSetting("Jwt:Issuer", "Test Issuer");
+        builder.UseSetting("Jwt:Audience", "Test Audience");
+        builder.UseSetting("Jwt:ExpiryMinutes", "15");
+        builder.UseSetting("Jwt:Key", Convert.ToBase64String(new byte[32]));
 
         builder.UseEnvironment("Testing");
     }
