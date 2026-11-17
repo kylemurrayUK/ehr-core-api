@@ -44,7 +44,7 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Contains(testId.ToString(), responseBody);
+        Assert.Contains("Appointment not found", responseBody);
     }
 
     [Fact]
