@@ -8,20 +8,19 @@ namespace ehr_core_api.IntegrationTests;
 
 public class WriteControllerIntegrationTests : IDisposable
 {
-    private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
 
     public WriteControllerIntegrationTests()
     {
         _factory = new CustomWebApplicationFactory<Program>();
         _factory.SeedDatabase();
-        _client = _factory.CreateClient();
     }
 
     [Fact]
     public async Task CreateAppointment_InvalidModel_Return400BadRequest()
     {
         //Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var testIncompleteAppointment = new CreateAppointmentDTO()
         {
             PatientId = null,
@@ -29,7 +28,7 @@ public class WriteControllerIntegrationTests : IDisposable
         };
         
         //Act
-        var response = await _client.PostAsJsonAsync("api/Appointment/CreateAppointment", testIncompleteAppointment);
+        var response = await client.PostAsJsonAsync("api/Appointment/CreateAppointment", testIncompleteAppointment);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         //Assert
@@ -42,6 +41,7 @@ public class WriteControllerIntegrationTests : IDisposable
     public async Task CreateAppointment_PatientIdNotFound_Return400BadRequest()
     {
         //Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var testIncorrectPatientIdAppointment = new CreateAppointmentDTO()
         {
             PatientId = 99999,
@@ -51,7 +51,7 @@ public class WriteControllerIntegrationTests : IDisposable
         };
         
         //Act
-        var response = await _client.PostAsJsonAsync("api/Appointment/CreateAppointment", testIncorrectPatientIdAppointment);
+        var response = await client.PostAsJsonAsync("api/Appointment/CreateAppointment", testIncorrectPatientIdAppointment);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         //Assert
@@ -63,6 +63,7 @@ public class WriteControllerIntegrationTests : IDisposable
     public async Task CreateAppointment_ValidAppointment_Return201WithAppointmentAndLocation()
     {
         //Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var testCorrectAppointment = new CreateAppointmentDTO()
         {
             PatientId = _factory.SeededData.patients[0].Id,
@@ -72,7 +73,7 @@ public class WriteControllerIntegrationTests : IDisposable
         };
         
         //Act
-        var response = await _client.PostAsJsonAsync("api/Appointment/CreateAppointment", testCorrectAppointment);
+        var response = await client.PostAsJsonAsync("api/Appointment/CreateAppointment", testCorrectAppointment);
         var responseLocation = response.Headers.Location;
         var responseBody = await response.Content.ReadFromJsonAsync<ReturnAppointmentDTO>();
 
@@ -85,7 +86,7 @@ public class WriteControllerIntegrationTests : IDisposable
         Assert.Equal(_factory.SeededData.clinicians[0].Id, responseBody.Clinician.Id);
 
         Assert.NotNull(responseLocation);
-        var responseLocationResponse = await _client.GetAsync(responseLocation);
+        var responseLocationResponse = await client.GetAsync(responseLocation);
         var appointmentAtResponseLocation = await responseLocationResponse.Content.ReadFromJsonAsync<ReturnAppointmentDTO>();
         Assert.NotNull(appointmentAtResponseLocation);
         Assert.Equal(responseBody.Id, appointmentAtResponseLocation.Id);
@@ -95,6 +96,7 @@ public class WriteControllerIntegrationTests : IDisposable
     public async Task ChangeAppointmentStatus_AppointmentIdDoesNotExist_Return404WithErrorMessage()
     {
         //Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var incorrectAppointment = new ChangeAppointmentStatusDTO
         {
             Id = 999999,
@@ -102,7 +104,7 @@ public class WriteControllerIntegrationTests : IDisposable
         };
 
         //Act
-        var response = await _client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", incorrectAppointment);
+        var response = await client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", incorrectAppointment);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         //Assert
@@ -114,14 +116,15 @@ public class WriteControllerIntegrationTests : IDisposable
     public async Task ChangeAppointmentStatus_SuccessfulAppointmentStatusChange_Return200WithConfirmationMessage()
     {
         //Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician);
         var correctAppointment = new ChangeAppointmentStatusDTO
         {
             Id = _factory.SeededData.appointments[0].Id,
-            Status = _factory.SeededData.appointments[0].Status == AppointmentStatus.EnteredInError ? AppointmentStatus.Cancelled : AppointmentStatus.EnteredInError
+            Status = AppointmentStatus.Completed
         };
 
         //Act
-        var response = await _client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", correctAppointment);
+        var response = await client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", correctAppointment);
         var responseBody = await response.Content.ReadAsStringAsync();
 
         //Assert

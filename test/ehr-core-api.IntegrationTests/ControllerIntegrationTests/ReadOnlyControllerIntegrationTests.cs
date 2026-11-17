@@ -1,26 +1,27 @@
 using EHRCoreAPI.Dtos.Output;
 using System.Net;
+using EHRCoreAPI.Models;
 
 
 namespace ehr_core_api.IntegrationTests;
 
 public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
 
     public ReadOnlyControllerIntegrationTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         factory.SeedDatabase();
-        _client = factory.CreateClient();
     }
 
      [Fact]
      public async Task ListAppointments_Return200WithAppointmentList()
     {
-         //Act
-        var response = await _client.GetAsync("/api/Appointment/ListAppointments");
+        // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
+        //Act
+        var response = await client.GetAsync("/api/Appointment/ListAppointments");
         var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<List<ReturnAppointmentDTO>>();
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -34,10 +35,11 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     public async Task GetAppointment_InvalidId_ReturnNotFoundWithErrorMessage()
     {
         // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var testId = 999999;
     
         // Act
-        var response = await _client.GetAsync($"/api/Appointment/GetAppointment/{testId}");
+        var response = await client.GetAsync($"/api/Appointment/GetAppointment/{testId}");
         var responseBody = await response.Content.ReadAsStringAsync(); 
 
         // Assert
@@ -49,10 +51,11 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     public async Task GetAppointment_ValidId_ReturnOkWithAppointmentDTO()
     {
         // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);        
         var appointmentUnderTest = _factory.SeededData.appointments[1];
     
         // Act
-        var response = await _client.GetAsync($"/api/Appointment/GetAppointment/{appointmentUnderTest.Id}");
+        var response = await client.GetAsync($"/api/Appointment/GetAppointment/{appointmentUnderTest.Id}");
         var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<ReturnAppointmentDTO>(); 
   
         // Assert
@@ -65,8 +68,11 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     [Fact]
     public async Task GetAppointmentBy_NoParameters_ReturnBadRequestWithErrorMessage()
     {
+        // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
+
         // Act
-        var response = await _client.GetAsync("/api/Appointment/GetAppointmentsBy/");
+        var response = await client.GetAsync("/api/Appointment/GetAppointmentsBy/");
         var responseBody = await response.Content.ReadAsStringAsync();
 
         //Assert
@@ -79,9 +85,11 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     public async Task GetAppointmentBy_ThreeParameters_ReturnOkWithAppropriateAppointments()
     {
         // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Admin);
         var testAppointment = _factory.SeededData.appointments[1];
+
         // Act
-        var response = await _client.GetAsync($"/api/Appointment/GetAppointmentsBy?patientId={testAppointment.PatientId}&department={testAppointment.Department}&status={testAppointment.Status}");
+        var response = await client.GetAsync($"/api/Appointment/GetAppointmentsBy?patientId={testAppointment.PatientId}&department={testAppointment.Department}&status={testAppointment.Status}");
         var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<List<ReturnAppointmentDTO>>();
 
         //Assert

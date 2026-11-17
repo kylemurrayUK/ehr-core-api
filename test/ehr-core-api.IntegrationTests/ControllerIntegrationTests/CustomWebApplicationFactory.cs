@@ -1,10 +1,10 @@
 using System.Data.Common;
-using System.Runtime.CompilerServices;
 using ehr_core_api.IntegrationTests;
 using EHRCoreAPI.Data;
 using EHRCoreAPI.Models;
+using EHRCoreAPI.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.SqlClient;
+using System.Net.Http.Headers;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -65,6 +65,27 @@ public class CustomWebApplicationFactory<TProgram>
             _seeded = true;
         }
         }
+    }
+
+    public HttpClient CreateClientAuthenticatedAs(UserRole role, int? clinicianId = null)
+    {
+        User testUser = new()
+        {
+            Id = 999,
+            Email = "testuserfortoken@email.com",
+            Role = role,
+            ClinicianId = clinicianId
+        };
+
+        var tokenService = Services.GetRequiredService<ITokenService>();
+        var token = tokenService.GenerateToken(testUser);
+
+        var client = CreateClient();
+
+        client.DefaultRequestHeaders.Authorization = 
+                                    new AuthenticationHeaderValue("Bearer", token.token);
+
+        return client;
     }
 
 }
