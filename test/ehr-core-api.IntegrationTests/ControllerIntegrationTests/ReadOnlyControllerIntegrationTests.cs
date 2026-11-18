@@ -1,6 +1,7 @@
 using EHRCoreAPI.Dtos.Output;
 using System.Net;
 using EHRCoreAPI.Models;
+using System.Net.Http.Headers;
 
 
 namespace ehr_core_api.IntegrationTests;
@@ -99,5 +100,34 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal(testAppointment.PatientId, appointmentToAssert.Patient.Id);
         Assert.Equal(testAppointment.Department, appointmentToAssert.Department);
         Assert.Equal(testAppointment.Status, appointmentToAssert.Status);
+    }
+
+    [Fact]
+    public async Task ChangeAppointmentStatus_BlankAuthenticationHeader_Returns401()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/api/Appointment/ListAppointments");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+        [Fact]
+    public async Task ChangeAppointmentStatus_InvalidBearerToken_Returns401()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Authorization = 
+                            new AuthenticationHeaderValue("Bearer", "invalidtokenvalue");
+
+        // Act
+        var response = await client.GetAsync("/api/Appointment/ListAppointments");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }
