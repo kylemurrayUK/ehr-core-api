@@ -103,7 +103,7 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
-    public async Task ChangeAppointmentStatus_BlankAuthenticationHeader_Returns401()
+    public async Task ListAppointments_BlankAuthenticationHeader_Returns401()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -115,8 +115,8 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
-        [Fact]
-    public async Task ChangeAppointmentStatus_InvalidBearerToken_Returns401()
+    [Fact]
+    public async Task ListAppointments_InvalidBearerToken_Returns401()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -130,4 +130,18 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
+    [Fact]
+    public async Task ListAppointments_NullIdInToken_Returns403()
+    {
+        // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician);
+
+
+        // Act
+        var response = await client.GetAsync("/api/Appointment/ListAppointments");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+    
 }

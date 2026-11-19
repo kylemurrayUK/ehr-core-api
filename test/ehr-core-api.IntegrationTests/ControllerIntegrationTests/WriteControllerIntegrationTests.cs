@@ -132,6 +132,30 @@ public class WriteControllerIntegrationTests : IDisposable
         Assert.Contains("Appointment status successfully changed", responseBody);
     }
 
+    [Theory]
+    [InlineData (UserRole.Clinician, AppointmentStatus.Completed, HttpStatusCode.OK)]
+    [InlineData (UserRole.Admin, AppointmentStatus.Completed, HttpStatusCode.Forbidden)]
+    [InlineData (UserRole.Admin, AppointmentStatus.Cancelled, HttpStatusCode.OK)]
+    [InlineData (UserRole.Clinician, AppointmentStatus.Cancelled, HttpStatusCode.Forbidden)]
+    [InlineData (UserRole.Clinician, AppointmentStatus.Pending, HttpStatusCode.OK)]
+    [InlineData (UserRole.Admin, AppointmentStatus.Pending, HttpStatusCode.OK)]
+    public async Task ChangeAppointmentStatus_PermissionsPerRole_ReturnsAppropriatePermissions(UserRole role, AppointmentStatus statusToChangeTo, HttpStatusCode expectedCode)
+    {
+        // Arrange
+        var client = _factory.CreateClientAuthenticatedAs(role);
+        var appointmentStatusChange = new ChangeAppointmentStatusDTO()
+        {
+            Id = _factory.SeededData.appointments[0].Id,
+            Status = statusToChangeTo            
+        };
+
+        // Act
+        var response = await client.PatchAsJsonAsync("/api/Appointment/ChangeAppointmentStatus", appointmentStatusChange);
+
+        // Assert
+        Assert.Equal(expectedCode, response.StatusCode);
+    }
+
     public void Dispose()
     {
         if(_factory.Connection != null)
