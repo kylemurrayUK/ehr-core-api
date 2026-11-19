@@ -132,6 +132,47 @@ public class AuthServiceUnitTests
             , Times.Once);
         _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Never);
     }
+    
+    [Fact]
+    public async Task LoginAsync_ClinicianWithoutClinicianId_ReturnAccountInactive()
+    {
+        // Arrange
+        string email = "validemail@email.com";
+        string password = "CorrectPassword";
+
+
+        var loginRequest = new LoginRequestDTO
+        {
+            Email = email, 
+            Password = password
+        };
+        var testUser = new User
+        {
+            Email = email,
+            HashedPassword = [],
+            HashSalt = [],
+            Role = UserRole.Clinician,
+            ClinicianId = null
+        };
+
+        _mockUserRepo.Setup(mock => mock.GetUserByEmailAsync(email))
+        .ReturnsAsync(testUser);
+        _mockPasswordHasher.Setup(mock => mock.VerifyPasswordHash(It.IsAny<string>()
+            ,It.IsAny<byte[]>()
+            ,It.IsAny<byte[]>()
+        )).Returns(true);
+
+        // Act
+        var result = await _authService.LoginAsync(loginRequest);
+
+        // Assert
+        Assert.Equal(LoginOutcome.AccountInactive, result.LoginOutcome);
+
+        _mockPasswordHasher.Verify(mock => mock.VerifyPasswordHash(
+            It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<byte[]>())
+            , Times.Once);
+        _mockTokenService.Verify(mock => mock.GenerateToken(It.IsAny<User>()), Times.Never);
+    }
 
     [Fact]
     public async Task LoginAsync_CorrectLoginDetails_ReturnToken()

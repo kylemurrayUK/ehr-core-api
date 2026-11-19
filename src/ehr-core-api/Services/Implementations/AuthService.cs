@@ -36,7 +36,7 @@ public class AuthService : IAuthService
             return result;
         }
 
-        if (user.Role == UserRole.Unassigned)
+        if (user.Role == UserRole.Unassigned || user.ClinicianId == null)
         {
             result.LoginOutcome = LoginOutcome.AccountInactive;
             return result;
