@@ -130,12 +130,12 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
+
     [Fact]
     public async Task ListAppointments_NullIdInToken_Returns403()
     {
         // Arrange
         var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician);
-
 
         // Act
         var response = await client.GetAsync("/api/Appointment/ListAppointments");
@@ -143,5 +143,66 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
         // Assert
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
+
+    [Fact]
+    public async Task ListAppointments_ClinicianSearchesAppointments_OnlyCliniciansAppointmentsReturned()
+    {
+        // Arrange
+        int clinicianId = _factory.SeededData.clinicians[3].Id;
+        int testCliniciansAmountOfAppointments = _factory.SeededData.appointments.Count(a => a.ClinicianId == clinicianId);
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician, clinicianId);
+
+        // Act
+        var response = await client.GetAsync("/api/Appointment/ListAppointments");
+        var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<List<ReturnAppointmentDTO>>();
+        
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(responseBodyAsAppointment);
+        Assert.NotEmpty(responseBodyAsAppointment);
+        Assert.Equal(testCliniciansAmountOfAppointments, responseBodyAsAppointment.Count);
+        Assert.All(responseBodyAsAppointment, a => {Assert.Equal(clinicianId,a.Clinician.Id);});
+    }
+    
+    [Fact]
+    public async Task GetAppointmentBy_ClinicianFiltersUsingAnotherCliniciansId_ReturnEmptyListWith200()
+    {
+        // Arrange
+        int clinicianIdForLogin = _factory.SeededData.clinicians[0].Id;
+        int clinicianIdForSearching = _factory.SeededData.clinicians[3].Id;
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician, clinicianIdForLogin);
+
+        // Act
+        var response = await client.GetAsync($"/api/Appointment/GetAppointmentsBy?clinicianId={clinicianIdForSearching}");
+        var responseBodyAsAppointment = await response.Content.ReadFromJsonAsync<List<ReturnAppointmentDTO>>();
+        
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(responseBodyAsAppointment);
+        Assert.Empty(responseBodyAsAppointment);
+    } 
+
+    [Fact]
+    public async Task GetAppointment_SearchingForDifferentClinicianAndInvalidId_Return404AndBothAreEqual()
+    {
+        // Arrange
+        int clinicianIdForLogin = _factory.SeededData.clinicians[0].Id;
+        int clinicianIdForSearching = _factory.SeededData.clinicians[3].Id;
+        var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician, clinicianIdForLogin);
+
+        // Act
+        var responseForSearchingWrongClinician = await client.GetAsync($"/api/Appointment/GetAppointment/{clinicianIdForSearching}");
+        string responseForSearchingWrongClinicianMessage = await responseForSearchingWrongClinician.Content.ReadAsStringAsync();
+        
+        var responseForSearchingIncorrectId = await client.GetAsync($"/api/Appointment/GetAppointment/{12348765}");
+        string responseForSearchingIncorrectIdMessage = await responseForSearchingIncorrectId.Content.ReadAsStringAsync();
+
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, responseForSearchingWrongClinician.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, responseForSearchingIncorrectId.StatusCode);
+        Assert.Equal(responseForSearchingWrongClinicianMessage, responseForSearchingIncorrectIdMessage);
+
+    } 
     
 }
