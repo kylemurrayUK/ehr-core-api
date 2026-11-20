@@ -187,19 +187,23 @@ public class ReadOnlyControllerIntegrationTests : IClassFixture<CustomWebApplica
     {
         // Arrange
         int clinicianIdForLogin = _factory.SeededData.clinicians[0].Id;
-        int clinicianIdForSearching = _factory.SeededData.clinicians[3].Id;
+        int otherClinicianId = _factory.SeededData.clinicians[3].Id;
+
+        var otherCliniciansAppointmentId = _factory.SeededData.appointments.First(a => a.ClinicianId == otherClinicianId).Id;
+
         var client = _factory.CreateClientAuthenticatedAs(UserRole.Clinician, clinicianIdForLogin);
 
         // Act
-        var responseForSearchingWrongClinician = await client.GetAsync($"/api/Appointment/GetAppointment/{clinicianIdForSearching}");
-        string responseForSearchingWrongClinicianMessage = await responseForSearchingWrongClinician.Content.ReadAsStringAsync();
+        var responseForOtherCliniciansAppointment =
+        await client.GetAsync($"/api/Appointment/GetAppointment/{otherCliniciansAppointmentId}");
+        string responseForSearchingWrongClinicianMessage = await responseForOtherCliniciansAppointment.Content.ReadAsStringAsync();
         
         var responseForSearchingIncorrectId = await client.GetAsync($"/api/Appointment/GetAppointment/{12348765}");
         string responseForSearchingIncorrectIdMessage = await responseForSearchingIncorrectId.Content.ReadAsStringAsync();
 
 
         // Assert
-        Assert.Equal(HttpStatusCode.NotFound, responseForSearchingWrongClinician.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, responseForOtherCliniciansAppointment.StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, responseForSearchingIncorrectId.StatusCode);
         Assert.Equal(responseForSearchingWrongClinicianMessage, responseForSearchingIncorrectIdMessage);
 
