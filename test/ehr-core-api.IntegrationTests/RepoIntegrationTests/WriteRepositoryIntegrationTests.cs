@@ -73,6 +73,7 @@ public class WriteRepositoryIntegrationTests : IDisposable
         Assert.NotEqual(originalAppointmentStatus, assertAppointment.Status);
         Assert.Equal(statusToUpdateTo, assertAppointment.Status);
     }
+    
 
     public void Dispose()
     {
