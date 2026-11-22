@@ -7,7 +7,8 @@ public class TestSeedData
 {
     public static (List<Patient> patients, 
                     List<Clinician> clinicians, 
-                    List<Appointment> appointments) SeedTestData(ApiDbContext _db)
+                    List<Appointment> appointments,
+                    List<User> users) SeedTestData(ApiDbContext _db)
     {
             var clinicians = new List<Clinician>
             {
@@ -29,6 +30,16 @@ public class TestSeedData
 
             _db.SaveChanges(); // patients and clinicians now have DB-assigned ids
 
+            var users = new List<User>
+            {
+                new User { Email = "adminuser@email.com", HashedPassword = [], HashSalt = [], Role = UserRole.Admin},
+                new User { Email = "clinicianuser@email.com", HashedPassword = [], HashSalt = [], Role = UserRole.Clinician, Clinician = clinicians[0]},
+                new User { Email = "noroleassigneduser@email.com", HashedPassword = [], HashSalt = [], Role = UserRole.Unassigned}
+            };
+
+            _db.Users.AddRange(users);
+            _db.SaveChanges();
+
             var appointments = new List<Appointment>
             {
                 new Appointment { Patient = patients[0], Clinician = clinicians[1], Department = "Cardiology",       Status = AppointmentStatus.Pending,        AppointmentTime = new DateTime(2026, 6, 15, 9, 0, 0) },
@@ -42,6 +53,6 @@ public class TestSeedData
 
         _db.SaveChanges();
 
-    return (patients, clinicians, appointments);
+    return (patients, clinicians, appointments, users);
     }
 }
