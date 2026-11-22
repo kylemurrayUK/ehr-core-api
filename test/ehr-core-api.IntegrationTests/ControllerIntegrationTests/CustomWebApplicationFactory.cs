@@ -14,7 +14,7 @@ public class CustomWebApplicationFactory<TProgram>
 {
     private bool _seeded = false;
     public DbConnection? Connection{get; set;}
-    public (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData {get; private set;}
+    public (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments, IReadOnlyList<User> users) SeededData {get; private set;}
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

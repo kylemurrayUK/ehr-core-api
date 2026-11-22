@@ -10,7 +10,7 @@ public class WriteRepositoryIntegrationTests : IDisposable
     public readonly AppointmentRepository _appointmentRepository;
     public readonly TestDatabaseFixture _fixture;
     public readonly ApiDbContext _context;
-    public  readonly (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData;
+    public  readonly (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments, IReadOnlyList<User> users) SeededData;
 
     public WriteRepositoryIntegrationTests()
     {

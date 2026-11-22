@@ -8,7 +8,7 @@ namespace ehr_core_api.IntegrationTests;
 public class TestDatabaseFixture
 {
     private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=EHRDb_IntegrationTests;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0";
-    public  (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments) SeededData {get;}
+    public  (IReadOnlyList<Patient> patients, IReadOnlyList<Clinician> clinicians, IReadOnlyList<Appointment> appointments, IReadOnlyList<User> users) SeededData {get;}
     
     public TestDatabaseFixture()
     {

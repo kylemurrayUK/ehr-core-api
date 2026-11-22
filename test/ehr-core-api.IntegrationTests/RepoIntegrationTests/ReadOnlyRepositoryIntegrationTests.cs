@@ -213,4 +213,36 @@ public class ReadOnlyRepositoryIntegrationTests : IClassFixture<TestDatabaseFixt
         // Assert
         Assert.Empty(appointments);
     }
+
+    [Fact]
+    public async Task GetUserByEmailAsync_SearchForCorrectEmail_CorrectUserReturned()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var userRepo = new UserRepository(context);
+        string correctEmail = "adminuser@email.com";
+        int correctIdForUser = Fixture.SeededData.users.First(u => u.Email == correctEmail).Id;
+
+        // Act
+        var returnedUser = await userRepo.GetUserByEmailAsync(correctEmail);
+
+        // Assert
+        Assert.NotNull(returnedUser);
+        Assert.Equal(correctIdForUser, returnedUser.Id);
+    }
+
+    [Fact]
+    public async Task GetUserByEmailAsync_SearchForIncorrectEmail_NullReturned()
+    {
+        // Arrange
+        using var context = Fixture.CreateContext();
+        var userRepo = new UserRepository(context);
+        string incorrectEmail = "nonsenseemailaddress@email.com";
+
+        // Act
+        var returnedUser = await userRepo.GetUserByEmailAsync(incorrectEmail);
+
+        // Assert
+        Assert.Null(returnedUser);
+    }
 }
