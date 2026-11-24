@@ -1,4 +1,3 @@
-using Azure;
 using EHRCoreAPI.Dtos;
 using EHRCoreAPI.Dtos.Output;
 using RestSharp;
@@ -10,13 +9,17 @@ public class SmokeTestFixture : IAsyncLifetime
 {
     // InitializeAsync ensures Client isn't null so a null warning is safe here
     public RestClient Client {get; private set;} = null!;
-    private const string BaseUrl = "https://localhost:7192";
+    public const string BaseUrl = "https://localhost:7192";
+    
+    // TODO remove hardcoded login credentials.
+    public const string ValidEmailForLogin = "adminemail@test.com";
+    public const string ValidPasswordForLogin = "Test@678";
 
     public async Task InitializeAsync()
     {        
         string token = await LoginAndReturnTokenString();
         var authenticator = new JwtAuthenticator(token);
-        var options = new RestClientOptions("https://localhost:7192")
+        var options = new RestClientOptions(BaseUrl)
         {
             Authenticator = authenticator
         };
@@ -25,22 +28,20 @@ public class SmokeTestFixture : IAsyncLifetime
 
     private async Task<string> LoginAndReturnTokenString()
     {
-        using var client = new RestClient("https://localhost:7192");
-        
-        // TODO remove hardcoded login credentials.
-        var validLoginCredentials = new LoginRequestDTO()
+        using var client = new RestClient(BaseUrl);
+        LoginRequestDTO ValidLoginDetails = new()
         {
-            Email = "adminemail@test.com",
-            Password = "Test@678"
+            Email = ValidEmailForLogin,
+            Password = ValidPasswordForLogin   
         };
         var request = new RestRequest("/api/Auth/Login");
-        request.AddJsonBody(validLoginCredentials);
+        request.AddJsonBody(ValidLoginDetails);
 
         var response = await client.ExecutePostAsync<LoginResponseDTO>(request);
 
         if (!response.IsSuccessful)
         {
-            throw new InvalidOperationException($"Smoke test login failed: {response.ErrorMessage}");
+            throw new InvalidOperationException($"Smoke test login failed: {response.StatusCode} - {response.ErrorMessage}");
         }
         if(response.Data is null)
         {
@@ -50,8 +51,9 @@ public class SmokeTestFixture : IAsyncLifetime
         return response.Data.Token;
     }
 
-    public async Task DisposeAsync()
+    public Task DisposeAsync()
     {
         Client.Dispose();
+        return Task.CompletedTask;
     }
 }

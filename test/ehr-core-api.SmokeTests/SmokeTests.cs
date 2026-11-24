@@ -9,7 +9,7 @@ namespace ehr_core_api.SmokeTests;
 public class SmokeTests : IClassFixture<SmokeTestFixture>
 {
 
-    private SmokeTestFixture _fixture;
+    private readonly SmokeTestFixture _fixture;
 
     public SmokeTests(SmokeTestFixture fixture)
     {
@@ -21,15 +21,16 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
     public async Task LoginAsync_LoginWithValidCredentials_Returns200WithToken()
     {
         // Arrange
+        using var unauthenticatedClient = new RestClient(SmokeTestFixture.BaseUrl);
         var validLoginCredentials = new LoginRequestDTO()
         {
-            Email = "adminemail@test.com",
-            Password = "Test@678"
+            Email = SmokeTestFixture.ValidEmailForLogin,
+            Password = SmokeTestFixture.ValidPasswordForLogin
         };
         var request = new RestRequest("/api/Auth/Login");
         request.AddJsonBody(validLoginCredentials);
 
-        var response = await _fixture.Client.ExecutePostAsync<LoginResponseDTO>(request);
+        var response = await unauthenticatedClient.ExecutePostAsync<LoginResponseDTO>(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(response.Data);
@@ -37,7 +38,7 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
     }
 
     [Fact]
-    public async Task GetAllAppointments_APIRunning_Return200WithList()
+    public async Task GetAllAppointments_APIRunning_Returns200WithList()
     {
         //Arrange
         var request = new RestRequest("/api/Appointment/ListAppointments");
@@ -89,6 +90,6 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
         //Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.NotNull(response.Content);
-        Assert.Contains(incorrectAppointmentId.ToString(), response.Content);
+        Assert.Contains("Appointment not found or you don't have access to it", response.Content);
     }
 }
