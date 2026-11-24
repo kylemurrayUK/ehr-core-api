@@ -5,6 +5,7 @@ using RestSharp;
 
 namespace ehr_core_api.SmokeTests;
 
+[Trait("Category", "Smoke")]
 public class SmokeTests : IClassFixture<SmokeTestFixture>
 {
 
@@ -15,7 +16,26 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
         _fixture = fixture;
     }
 
-    [Trait("Category", "Smoke")]
+
+    [Fact]
+    public async Task LoginAsync_LoginWithValidCredentials_Returns200WithToken()
+    {
+        // Arrange
+        var validLoginCredentials = new LoginRequestDTO()
+        {
+            Email = "adminemail@test.com",
+            Password = "Test@678"
+        };
+        var request = new RestRequest("/api/Auth/Login");
+        request.AddJsonBody(validLoginCredentials);
+
+        var response = await _fixture.Client.ExecutePostAsync<LoginResponseDTO>(request);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(response.Data);
+        Assert.NotEmpty(response.Data.Token);
+    }
+
     [Fact]
     public async Task GetAllAppointments_APIRunning_Return200WithList()
     {
@@ -30,7 +50,6 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
         Assert.NotNull(response.Data);
     }
 
-    [Trait("Category", "Smoke")]
     [Fact]
     public async Task CreateAppointment_APIRunning_Return201WithAppointment()
     {
@@ -57,7 +76,6 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
         Assert.NotEqual(0, response.Data.Id);
     }
 
-    [Trait("Category", "Smoke")]
     [Fact]
     public async Task GetAppointment_APIRunningButIncorrectAppointment_Return404WithMessage()
     {
