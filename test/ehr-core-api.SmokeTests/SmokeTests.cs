@@ -52,7 +52,7 @@ public class SmokeTests : IClassFixture<SmokeTestFixture>
     }
 
     [Fact]
-    public async Task CreateAppointment_APIRunning_Return201WithAppointment()
+    public async Task CreateAppointment_APIRunning_Returnss201WithAppointment()
     {
         //Arrange
         var testAppointmentToCreate = new CreateAppointmentDTO
