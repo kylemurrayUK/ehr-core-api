@@ -68,8 +68,7 @@ namespace EHRCoreAPI.Services.Implementations
         // No delete method as in a medical context you would want to keep all appointments
         // - even cancelled ones - for auditing purposes.
         public async Task<(bool wasSuccessful, string message)> ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
-        {
-            // ! used here as changeAppointmentStatusDTO's id has been validated as not null by the controller
+        {           
             var appointment = await _appointmentRepository.GetAppointmentAsync(changeAppointmentStatusDTO.Id ?? throw new ArgumentException("Appointment Id was null"));
 
             if(appointment == null)
