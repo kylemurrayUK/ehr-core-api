@@ -70,7 +70,7 @@ namespace EHRCoreAPI.Services.Implementations
         public async Task<(bool wasSuccessful, string message)> ChangeAppointmentStatus(ChangeAppointmentStatusDTO changeAppointmentStatusDTO)
         {
             // ! used here as changeAppointmentStatusDTO's id has been validated as not null by the controller
-            var appointment = await _appointmentRepository.GetAppointmentAsync(changeAppointmentStatusDTO.Id!.Value);
+            var appointment = await _appointmentRepository.GetAppointmentAsync(changeAppointmentStatusDTO.Id ?? throw new ArgumentException("Appointment Id was null"));
 
             if(appointment == null)
             {
