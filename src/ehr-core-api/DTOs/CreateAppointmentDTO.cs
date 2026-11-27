@@ -13,7 +13,7 @@ namespace EHRCoreAPI.Dtos
         [Required(ErrorMessage = "Patient Id is required.")]
         public int? PatientId {get; set;}
         /// <summary>
-        /// Department appoint sits with
+        /// Department appointment sits with
         /// </summary>
         [Required(ErrorMessage = "Department name is required.")]
         [MaxLength(30)]
@@ -24,6 +24,6 @@ namespace EHRCoreAPI.Dtos
         [Required(ErrorMessage = "Clinician Id is required.")]
         public int? ClinicianId {get; set;}
         [Required(ErrorMessage = "Date and time of appointment is required. ")]
-        public DateTime AppointmentTime{get; set;}
+        public DateTime? AppointmentTime{get; set;}
     }
 }

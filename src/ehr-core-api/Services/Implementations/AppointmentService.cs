@@ -40,10 +40,12 @@ namespace EHRCoreAPI.Services.Implementations
 
         public async Task<CreateAppointmentStatus> AddAppointmentAsync(CreateAppointmentDTO createAppointmentDTO)
         {
+            int patientId = createAppointmentDTO.PatientId ?? throw new ArgumentException("PatientId is null");
+            int clinicianId = createAppointmentDTO.ClinicianId ?? throw new ArgumentException("Clinician is null");
             
-            // ! used because both patient and clinician ID has been verified as not being null by the controller
-            var patient = await _patientRepository.GetPatientAsync(createAppointmentDTO.PatientId!.Value);
-            var clinician = await _clinicianRepository.GetClinicianAsync(createAppointmentDTO.ClinicianId!.Value);
+
+            var patient = await _patientRepository.GetPatientAsync(patientId);
+            var clinician = await _clinicianRepository.GetClinicianAsync(clinicianId);
             if (patient == null)
             {
                 return CreateAppointmentStatus.Failure("Patient with this ID does not exist.");
@@ -52,9 +54,12 @@ namespace EHRCoreAPI.Services.Implementations
             {
                 return CreateAppointmentStatus.Failure("Clinician with this ID does not exist.");
             }
-            // ! used here as PatientId and clinicianID  have been validated as not null.
-            Appointment newAppointment = new Appointment{ PatientId = createAppointmentDTO.PatientId!.Value, Department = createAppointmentDTO.Department, ClinicianId = createAppointmentDTO.ClinicianId!.Value,
-                                                          Status = AppointmentStatus.Pending, AppointmentTime = createAppointmentDTO.AppointmentTime};
+            
+            Appointment newAppointment = new Appointment{ PatientId = patientId, 
+                                                          Department = createAppointmentDTO.Department, 
+                                                          ClinicianId = clinicianId,
+                                                          Status = AppointmentStatus.Pending,
+                                                          AppointmentTime = createAppointmentDTO.AppointmentTime ?? throw new NullReferenceException("Appointment time is null")};
             await _appointmentRepository.AddAndSaveAppointmentAsync(newAppointment);
 
             return CreateAppointmentStatus.Success(newAppointment);
