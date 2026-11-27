@@ -12,6 +12,6 @@ namespace EHRCoreAPI.Dtos
         public int? Id { get; set; }
 
         [Required(ErrorMessage = "New status is required")]
-        public AppointmentStatus Status { get; set;}
+        public AppointmentStatus? Status { get; set;}
     }
 }

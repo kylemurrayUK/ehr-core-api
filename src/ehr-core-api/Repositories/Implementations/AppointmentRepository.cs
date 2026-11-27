@@ -36,9 +36,9 @@ namespace EHRCoreAPI.Repositories.Implementations
             _db.Appointments.Add(newAppointment);
             await _db.SaveChangesAsync();
         }
-        public async Task UpdateStatus (Appointment appointment, AppointmentStatus newAppointmentStatus)
+        public async Task UpdateStatus (Appointment appointment, AppointmentStatus? newAppointmentStatus)
         {
-            appointment.Status = newAppointmentStatus;
+            appointment.Status = newAppointmentStatus ?? throw new ArgumentException("Appointment status is null");
             await _db.SaveChangesAsync();
         }
         public async Task<List<Appointment>> GetAppointmentByAsync(FilterParameters filters, int? clinicianId = null)
