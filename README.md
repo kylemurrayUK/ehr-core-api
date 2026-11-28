@@ -137,7 +137,6 @@ How this is enforced:
 ## Design Decisions
 
 ### General
- - Some null forgiving operators (!) were used throughout to silence compiler null warnings. This is due to the service layer accepting nullable value types on data that has already been validated in the controller layer. In the future separate command models could be implemented to push validation back into the controller layer.
  - A delete request is noticeably absent from the http methods implemented. This is because in a medical context you wouldn't want data being deleted entirely for auditing purposes. I decided instead have an EnteredInError status code to keep the implementation domain appropriate.
  - Further to the above point, restricted deletion has been added to foreign keys to further reinforce audit trail.
  - No controllers have been implemented for handling patient and clinicians yet. However, this is likely to come in a further project.

@@ -32,10 +32,14 @@ namespace EHRCoreAPI.Controllers
             }
             else if (loginRequestResult.LoginOutcome == LoginOutcome.Success)
             {
+                if (loginRequestResult.Token == null ||loginRequestResult.ExpiresAt == null)
+                {
+                    throw new ArgumentException("login request result value is null");
+                }
                 var loginResponse = new LoginResponseDTO
                 {
-                    Token = loginRequestResult.Token!,
-                    ExpiresAt = loginRequestResult.ExpiresAt!.Value
+                    Token = loginRequestResult.Token,
+                    ExpiresAt = loginRequestResult.ExpiresAt.Value
                 };
                 return Ok(loginResponse);
             }

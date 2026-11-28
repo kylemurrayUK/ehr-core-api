@@ -75,7 +75,7 @@ namespace EHRCoreAPI.Controllers
                 return NotFound($"Appointment not found or you don't have access to it");
             }
 
-            var appointmentResponse = appointment.ToReturnDTO(appointment.Patient!.ToPatientSummary(), appointment.Clinician!.ToClinicianSummary());
+            var appointmentResponse = appointment.ToReturnDTO(appointment.Patient.ToPatientSummary(), appointment.Clinician.ToClinicianSummary());
 
             return Ok(appointmentResponse);
         }
@@ -152,13 +152,16 @@ namespace EHRCoreAPI.Controllers
             }
 
             CreateAppointmentStatus createAppointment = await _appointmentService.AddAppointmentAsync(createAppointmentDTO);
-
+            if (createAppointment.NewAppointment == null)
+            {
+                throw new ArgumentException("New appointment is null");
+            }
             if (!createAppointment.WasSuccessful)
             {
                 return BadRequest(createAppointment.Message);
             }
-            ReturnAppointmentDTO submittedAppointment = createAppointment.NewAppointment!.ToReturnDTO(createAppointment.NewAppointment!.Patient.ToPatientSummary(),
-                                                        createAppointment.NewAppointment!.Clinician.ToClinicianSummary());
+            ReturnAppointmentDTO submittedAppointment = createAppointment.NewAppointment.ToReturnDTO(createAppointment.NewAppointment.Patient.ToPatientSummary(),
+                                                        createAppointment.NewAppointment.Clinician.ToClinicianSummary());
             return CreatedAtAction(nameof(GetAppointment), new {id = submittedAppointment.Id}, submittedAppointment);
         }
 
